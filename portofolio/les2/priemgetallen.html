@@ -1,0 +1,26 @@
+
+<script src="jquery-1.12.0.min.js"></script>
+<script>
+
+ 
+    document.write("nicoooo");
+    
+    
+    
+   
+    for (var teller = 0; teller <= 1000000; teller++) {
+
+    var notPrime = false;
+    for (var i = 2; i <= teller; i++) {
+        if (teller % i == 0 && i !== teller) {
+            notPrime = true;
+        }
+    }
+    if (notPrime == false) {
+        document.write("<br>"+teller);
+                console.log(teller);
+    }
+}
+
+
+</script>

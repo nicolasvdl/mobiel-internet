@@ -1,0 +1,77 @@
+<input type="text" id="getal1"  onkeyup="rekenmachine();" value="" />
+<select id="select" onchange="rekenmachine();">
+  <option value="som">+</option>
+  <option value="trekaf">-</option>
+  <option value="deel">/</option>
+  <option value="vermenigvuldig">*</option>
+</select>
+<input type="text" id="getal2"  onkeyup="rekenmachine();"  value="" />
+<input type="text" id="getal3" />
+<br>
+<input type="text" id="getal4"  onkeyup=""  value="" />
+<button type="button" id="plus" onclick="rekenmachine2(this.id);">+</button>
+<button type="button" id="min" onclick="rekenmachine2(this.id);">-</button>
+<button type="button" id="maal" onclick="rekenmachine2(this.id);">*</button>
+<button type="button" id="deel" onclick="rekenmachine2(this.id);">/</button>
+<button type="button" id="=" onclick="berekening();">=</button>
+<script>
+    var getal4;
+    var getal5;
+    var teken;
+    var result;
+function rekenmachine2(id) {
+    teken = id;
+    getal4 = document.getElementById('getal4').value;
+    document.getElementById('getal4').value = "";
+}
+    function berekening() {
+    
+    getal5 = document.getElementById('getal4').value;
+        
+        if(teken == "plus"){
+            result = parseInt(getal4) + parseInt(getal5);
+            document.getElementById('getal4').value = result;
+        }
+        else if(teken == "min"){
+            result = parseInt(getal4) - parseInt(getal5);
+            document.getElementById('getal4').value = result;
+        }
+        else if(teken == "maal"){
+            result = parseInt(getal4) * parseInt(getal5);
+            document.getElementById('getal4').value = result;
+        }
+        else {
+            result = parseInt(getal4) / parseInt(getal5);
+            document.getElementById('getal4').value = result;
+        }
+}
+</script>
+
+<script>
+function rekenmachine() {
+    
+    var stenum = document.getElementById('getal1').value;
+    var denum = document.getElementById('getal2').value;
+    if(document.getElementById('select').value == "som")
+    {
+          var result = parseInt(stenum) + parseInt(denum);
+    }
+    else if(document.getElementById('select').value == "trekaf")
+    { 
+          var result = parseInt(stenum) - parseInt(denum); 
+    }
+    else if(document.getElementById('select').value == "deel")
+    {
+          var result = parseInt(stenum) / parseInt(denum);
+    }
+    else
+    {
+          var result = parseInt(stenum) * parseInt(denum);
+    }
+    if (!isNaN(result)) 
+    {
+         document.getElementById('getal3').value = result;
+    }
+}
+</script>
+

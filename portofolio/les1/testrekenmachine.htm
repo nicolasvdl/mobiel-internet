@@ -1,0 +1,127 @@
+<script>function telop(waarde1, waarde2){
+	return waarde1 + waarde2;
+    
+}
+function trekaf(waarde1, waarde2){
+	return waarde1 - waarde2;
+}
+function deel(waarde1, waarde2){
+	return waarde1 + waarde2;
+}
+function vermenigvuldig(waarde1, waarde2){
+	return waarde1 * waarde2;
+}
+
+object.onclick=function(){myScript};
+
+document.write("som : " + telop(2,7) + '<br>');
+document.write("som : " + telop(10,7) + '<br>');</script>
+
+<input type="text" name="getal1">
+<input type="text" id="total" name="getal2">
+<button onclick="getElementById('demo').telop(getal1,getal2)">Click me</button>
+
+<p id="demo"></p>
+
+
+
+
+<script>
+function sum() {
+      var txtFirstNumberValue = document.getElementById('txt1').value;
+      var txtSecondNumberValue = document.getElementById('txt2').value;
+      var result = parseInt(txtFirstNumberValue) + parseInt(txtSecondNumberValue);
+      if (!isNaN(result)) {
+         document.getElementById('txt3').value = result;
+      }
+}
+
+</script>
+
+<input type="text" id="txt1"  onkeyup="sum();" />
+<input type="text" id="txt2"  onkeyup="sum();" />
+<input type="text" id="txt3" />
+
+
+<script>
+function rekenmachine() {
+if(document.getElementById('select').value == "som"){
+	   var 1stenum = document.getElementById('getal1').value;
+      var 2denum = document.getElementById('getal2').value;
+      var result = parseInt(1stenum) + parseInt(2denum);
+      if (!isNaN(result)) {
+         document.getElementById('getal3').value = result;
+      }
+}else if(document.getElementById('select').value == "trekaf"){
+	 var 1stenum = document.getElementById('getal1').value;
+      var 2denum = document.getElementById('getal2').value;
+      var result = parseInt(1stenum) - parseInt(2denum);
+      if (!isNaN(result)) {
+         document.getElementById('getal3').value = result;
+      }
+}
+else if(document.getElementById('select').value == "deel"){
+	var 1stenum = document.getElementById('getal1').value;
+      var 2denum = document.getElementById('getal2').value;
+      var result = parseInt(1stenum) / parseInt(2denum);
+      if (!isNaN(result)) {
+         document.getElementById('getal3').value = result;
+      }
+}
+else(){
+	var 1stenum = document.getElementById('getal1').value;
+      var 2denum = document.getElementById('getal2').value;
+      var result = parseInt(1stenum) * parseInt(2denum);
+      if (!isNaN(result)) {
+         document.getElementById('getal3').value = result;
+      }
+}
+
+
+
+
+}
+function som() {
+      var 1stenum = document.getElementById('getal1').value;
+      var 2denum = document.getElementById('getal2').value;
+      var result = parseInt(1stenum) + parseInt(2denum);
+      if (!isNaN(result)) {
+         document.getElementById('getal3').value = result;
+      }
+}
+function trekaf() {
+      var 1stenum = document.getElementById('getal1').value;
+      var 2denum = document.getElementById('getal2').value;
+      var result = parseInt(1stenum) - parseInt(2denum);
+      if (!isNaN(result)) {
+         document.getElementById('getal3').value = result;
+      }
+}
+    function deel() {
+      var 1stenum = document.getElementById('getal1').value;
+      var 2denum = document.getElementById('getal2').value;
+      var result = parseInt(1stenum) / parseInt(2denum);
+      if (!isNaN(result)) {
+         document.getElementById('getal3').value = result;
+      }
+}
+    function vermenigvuldig() {
+      var 1stenum = document.getElementById('getal1').value;
+      var 2denum = document.getElementById('getal2').value;
+      var result = parseInt(1stenum) * parseInt(2denum);
+      if (!isNaN(result)) {
+         document.getElementById('getal3').value = result;
+      }
+}
+</script>
+
+
+<input type="text" id="getal1"  onkeyup="rekenmachine();" />
+<select id="select">
+  <option value="som">+</option>
+  <option value="trekaf">-</option>
+  <option value="deel">/</option>
+  <option value="vermenigvuldig">*</option>
+</select>
+<input type="text" id="getal2"  onkeyup="rekenmachine();" />
+<input type="text" id="getal3" />
