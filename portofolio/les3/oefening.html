@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="nl">
+	<head>
+		<meta charset="utf-8" >
+		<meta name="description" content="beschrijving van de webpagina" >
+		<meta name="keywords" content="trefwoorden, gescheiden, door, komma's">
+        <meta name="viewport" content="width=device-width, height=device-height" />
+		<title>Titel van de webpagina</title>
+        <script src="js/jquery-1.12.1.min.js"> </script>
+        <script type="text/javascript">
+                "use strict";
+                    $(document).ready(function () {
+                        $('#inhoud').addClass("title");
+                       $('#inhoud').html("Starten met jquery! Oef 2.3");
+                        $('#inhoud').animate({fontSize:"90px"},2500);
+        });
+
+
+
+
+        </script>
+        <script>
+         "use strict";
+        $(document).ready(function () {
+                       $('p').show('slow');
+        });
+
+
+        
+        </script>
+        <style> 
+        
+            .title{
+            
+            text-align: center;
+                line-height: 200px;
+                font-size: 1px;
+                color: #00b;
+ 
+            
+            }
+        
+        
+        </style>
+            
+	</head>
+
+	<body>
+        <div id="inhoud"></div>
+        <div>
+            <header>
+                <h1>oef 2.4</h1>
+            
+            </header>
+            <nav>
+            <p><a href='/'>Home</a></p>
+            <p><a href='/Contact'>Contact</a></p>    
+            
+            </nav>
+            <div id="inhoud"><p style='display:none;'>blablablabla</p></div>
+        
+        </div>
+	</body>
+</html>
