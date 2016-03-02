@@ -1,10 +1,15 @@
 <script src="jquery-1.12.0.min.js"></script>
-<div style='height:100px; width:100px; border:solid 1px black;'>
+<div id="bord" style='height:100px; width:100px; border:solid 1px black;'>
 <script>
+    function grotermaken() {
     
+    var x = document.getElementById("range").value;
+ 
+        document.getElementById('bord').setAttribute("style","width:" + x + "px;" + "height:" + x + "px;");
+     
+    }
     var rijen=1;
     var vakken=1;
-
 while(rijen<9){
     
     document.write("<b>");
@@ -24,9 +29,7 @@ while(rijen<9){
     rijen++;
     vakken=1;
 }
-
-
-
 </script>
-
+<input type="range" id="range" value="0" onchange="grotermaken();" max='1000'>
+    
 </div>  
