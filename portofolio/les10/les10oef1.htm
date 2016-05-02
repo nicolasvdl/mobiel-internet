@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="beschrijving van de webpagina">
+    <meta name="keywords" content="trefwoorden, gescheiden, door, komma's">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <script src="jquery-1.12.1.min.js"></script>
+
+    <script>
+         "use strict";
+        /*global $ */
+        
+        var $open = true;
+        
+        
+        
+        function opendoos() {
+            
+            
+            if ($open === true){
+                
+                
+                
+                
+                setTimeout(function () {
+                                  $('#box').css({
+                'background-position': '-112px 0px'
+            });
+                            }, 100);
+                
+                 setTimeout(function () {
+                                  $('#box').css({
+                'background-position': '-207px 0px'
+            });
+                            }, 300);
+                setTimeout(function () {
+                                  $('#box').css({
+                'background-position': '-303px 0px'
+            });
+                            }, 500);
+                setTimeout(function () {
+                                  $('#box').css({
+                'background-position': '-398px 0px'
+            });
+                            }, 700);
+                
+         
+                
+			$open = false;
+                
+            }
+        else{
+           
+                setTimeout(function () {
+                                  $('#box').css({
+                'background-position': '-303px 0px'
+            });
+                            }, 100);
+                     setTimeout(function () {
+                                  $('#box').css({
+                'background-position': '-207px 0px'
+            });
+                            }, 300);
+            
+              setTimeout(function () {
+                                  $('#box').css({
+                'background-position': '-112px 0px'
+            });
+                            }, 500);
+                     setTimeout(function () {
+                    $('#box').css({
+                'background-position': '-14px 0px'
+           
+            });
+                            }, 700);
+        
+       
+        
+      
+            
+            
+            
+            $open = true;
+        }
+        }
+     
+            
+            
+				
+    
+    </script>
+    <title>Titel van de webpagina</title>
+    <style>
+        body{
+            
+            text-align: center;
+            
+        }
+        
+        #container{
+            float: none;
+            display: inline-block;
+            *display: inline;
+            zoom: 1;
+            vertical-align: top;
+            width: 50%;
+            height: 500px;
+            background-color: dimgray;
+            text-align: center;
+        }
+        #box{
+            background-image: url(box.jpg);
+            width: 100px;
+              height: 120px;  
+             float: none;
+            display: inline-block;
+            *display: inline;
+            zoom: 1;
+            vertical-align: top;
+       background-position: -12px 0px;
+        }
+    </style>
+</head>
+
+
+<body>
+    <div id="container">
+    <div id="box" onclick="opendoos()">
+        
+        
+        </div>
+    <img src="" id="">
+    
+    </div>
+</body>
+
+</html>

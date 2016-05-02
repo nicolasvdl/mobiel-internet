@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="beschrijving van de webpagina">
+    <meta name="keywords" content="trefwoorden, gescheiden, door, komma's">
+    <meta name="viewport" content="width=device-width, height=device-height" />
+    <script src="../jquery-1.12.1.min.js"></script>
+    <title>Titel van de webpagina</title>
+    <script>
+    
+    $(document).ready(function () {
+           var plaats = $("li").last().detach();
+    var aantal =$("li").length; 
+        $("body").append("<p class='3'>weer3:</p>");
+        $("div").append("Aantal plaatsen: " + aantal);
+        $("#1" ).append(" 9	°C");
+         $("#2" ).append(" 10 	°C");
+         $(".3" ).append(" 15 	°C");
+         $("#4" ).append(" 20 	°C");
+     $("ul").prepend("<li id='5'>Las Vegas</li>");
+                 
+    });
+        
+    </script>
+</head>
+
+<body>
+    <div></div>
+    <ul>
+        <li id='1'>London</li>
+        <li id='2'>Paris</li>
+        <li class='3'>Brussels</li>
+        <li id='4'>Washington</li>
+        <li id='5'>Las Vegas</li>
+    </ul>
+
+</body>
+
+</html>
