@@ -13,11 +13,7 @@
         /*global $ */
         
         var $open = true,
-            arr = ['-14px 0px','-112px 0px','-207px 0px','-303px 0px','-398px 0px'];
-        
-        
-
-        
+            arr = ['-14px 0px','-112px 0px','-208px 0px','-303px 0px','-398px 0px'];
         function opendoos() {
             
             
@@ -25,33 +21,28 @@
                 
             var maxLoops = 4;
             var counter = 0;
-
             (function next() {
                 if (counter++ >= maxLoops) return;
-
-                setTimeout(function() {
-                      $('#box').css({
-                            'background-position': ''+arr[counter]});
+                    setTimeout(function() {
+                        $('#box').css({
+                        'background-position': ''+arr[counter]
+                    });
                     next();
                 }, 150);
-            })();
-
-                
+            })();  
 			$open = false;
-                
             }
         else{
             var maxLoops = -1;
             var counter = 5;
-
             (function next() {
                 if (counter-- <= maxLoops) return;
-
-                setTimeout(function() {
-                      $('#box').css({
-                            'background-position': ''+arr[counter]});
+                    setTimeout(function() {
+                        $('#box').css({
+                        'background-position': ''+arr[counter]
+                    });
                     next();
-                }, 150);
+                    }, 150);
             })();
             $open = true;
         }
@@ -78,13 +69,13 @@
             vertical-align: top;
             width: 50%;
             height: 500px;
-            background-color: dimgray;
+            background-color: white;
             text-align: center;
         }
         #box{
             background-image: url(box.jpg);
-            width: 100px;
-              height: 120px;  
+            width: 96px;
+              height: 150px;  
              float: none;
             display: inline-block;
             *display: inline;
