@@ -12,76 +12,47 @@
          "use strict";
         /*global $ */
         
-        var $open = true;
+        var $open = true,
+            arr = ['-14px 0px','-112px 0px','-207px 0px','-303px 0px','-398px 0px'];
         
         
+
         
         function opendoos() {
             
             
             if ($open === true){
                 
-                
-                
-                
-                setTimeout(function () {
-                                  $('#box').css({
-                'background-position': '-112px 0px'
-            });
-                            }, 100);
-                
-                 setTimeout(function () {
-                                  $('#box').css({
-                'background-position': '-207px 0px'
-            });
-                            }, 300);
-                setTimeout(function () {
-                                  $('#box').css({
-                'background-position': '-303px 0px'
-            });
-                            }, 500);
-                setTimeout(function () {
-                                  $('#box').css({
-                'background-position': '-398px 0px'
-            });
-                            }, 700);
-                
-         
+            var maxLoops = 4;
+            var counter = 0;
+
+            (function next() {
+                if (counter++ >= maxLoops) return;
+
+                setTimeout(function() {
+                      $('#box').css({
+                            'background-position': ''+arr[counter]});
+                    next();
+                }, 150);
+            })();
+
                 
 			$open = false;
                 
             }
         else{
-           
-                setTimeout(function () {
-                                  $('#box').css({
-                'background-position': '-303px 0px'
-            });
-                            }, 100);
-                     setTimeout(function () {
-                                  $('#box').css({
-                'background-position': '-207px 0px'
-            });
-                            }, 300);
-            
-              setTimeout(function () {
-                                  $('#box').css({
-                'background-position': '-112px 0px'
-            });
-                            }, 500);
-                     setTimeout(function () {
-                    $('#box').css({
-                'background-position': '-14px 0px'
-           
-            });
-                            }, 700);
-        
-       
-        
-      
-            
-            
-            
+            var maxLoops = -1;
+            var counter = 5;
+
+            (function next() {
+                if (counter-- <= maxLoops) return;
+
+                setTimeout(function() {
+                      $('#box').css({
+                            'background-position': ''+arr[counter]});
+                    next();
+                }, 150);
+            })();
             $open = true;
         }
         }
@@ -119,7 +90,7 @@
             *display: inline;
             zoom: 1;
             vertical-align: top;
-       background-position: -12px 0px;
+       background-position: -14px 0px;
         }
     </style>
 </head>
