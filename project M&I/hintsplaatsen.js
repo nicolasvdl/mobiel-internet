@@ -1,4 +1,5 @@
-function hintsplaatsen(id){
+function hintsplaatsen(id) {
+    if(hintson==true){
 if(id == '1' || id == '1b' || id == '4'|| id == '4b'|| id == '12'|| id == '12b')
                 { 
                     
@@ -281,4 +282,5 @@ if(id == '1' || id == '1b' || id == '4'|| id == '4b'|| id == '12'|| id == '12b')
                     $('#hint2'+ id).prepend('<img class="nodragimg hint" src="images/hint2/'+hint2+'" />');
                     $('#hint3'+ id).prepend('<img class="nodragimg hint" src="images/hint3/'+hint3+'" />');
                 }
+        }
 }

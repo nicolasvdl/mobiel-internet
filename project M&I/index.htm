@@ -9,55 +9,52 @@
     <script src="jquery-1.12.1.min.js"></script>
     <script src="hintsplaatsen.js"></script>
     <script>
-        var kaartteller = 0;
-        var kaart1;
-        var kaart2;
-        var timerhandeler
-        var aantalkaartenjuist = 0;
-        var aantalkaartenomgedraait = 0;
-        var indexMilliSec = 0;
-        var indexTimerSec = 0;
-        var indexTimerMin = null;
-        var obj = new Timer();
-        var soundon = true;
-        var hintson = true;
-        var nulMillisec;
-        var nulSec;
-        var nulmin;
-        var indexTimerMin2
-
-        function Reloadgame() {
-
-            $("#f1_container").remove();
-            $("#notif").remove();
-            $('<div/>', {
-                'id': 'f1_container',
-            }).appendTo('body');
-            obj.Stop();
-            indexMilliSec = 0;
-            indexTimerSec = 0;
-            indexTimerMin = null;
-            timerplaatsen();
-            kaartenmaken();
-            kaartogenbliktonen();
+        "use strict";
+        /*global $ */
+        var kaartteller = 0,
+            kaart1,
+            kaart2,
+            timerhandeler,
+            aantalkaartenjuist = 0,
+            aantalkaartenomgedraait = 0,
+            indexMilliSec = 0,
+            indexTimerSec = 0,
+            indexTimerMin = null,
+            obj = new Timer(),
+            soundon = true,
+            hintson = true,
+            nulMillisec,
+            nulSec,
+            nulmin,
+            indexTimerMin2,
+            jokerson = true,
+            gamestart = false,
+            helpopen = true;
 
 
 
+        function jokers() {
+            if (jokerson === true) {
+                $("#jokersaan").attr("src", "images/jokeroff.jpg");
+                jokerson = false;
+            } else {
+                $("#jokersaan").attr("src", "images/joker.jpg");
+                jokerson = true;
+            }
         }
 
         function hints() {
-            if (hintson == true) {
+            if (hintson === true) {
                 $("#hintsaan").attr("src", "images/hintsoff.png");
                 hintson = false;
             } else {
                 $("#hintsaan").attr("src", "images/hintson.png");
                 hintson = true;
             }
-
         }
 
         function soundcontrol() {
-            if (soundon == true) {
+            if (soundon === true) {
                 $("#sound").attr("src", "images/soundoff.png");
                 soundon = false;
             } else {
@@ -71,8 +68,8 @@
             this.Interval = 1000;
             this.Enable = new Boolean(false);
             this.Tick;
-            var timerId = 0;
-            var thisObject;
+            var timerId = 0,
+                thisObject = false;
             this.Start = function () {
                 this.Enable = new Boolean(true);
                 thisObject = this;
@@ -80,31 +77,36 @@
                     thisObject.timerId = setInterval(
                         function () {
                             thisObject.Tick();
-                        }, thisObject.Interval);
+                        },
+                        thisObject.Interval
+                    );
                 }
-            }
+            };
             this.Stop = function () {
                 thisObject.Enable = new Boolean(false);
                 clearInterval(thisObject.timerId);
-            }
+            };
 
         }
 
         function timerplaatsen() {
-            if (indexTimerMin == null) {
+            if (indexTimerMin === null) {
                 indexTimerMin2 = 0;
-                 nulMillisec = "0";
+                nulMillisec = "0";
                 nulSec = "0";
-                 nulmin = "0";
+                nulmin = "0";
             } else {
-                indexTimerMin2 = indexTimerMin
+                indexTimerMin2 = indexTimerMin;
             }
-            document.getElementById("tijdmin").remove();
-            document.getElementById("tijdsec").remove();
-            document.getElementById("tijdmillisec").remove();
-            $('#timer').prepend('<p id="tijdmillisec" class="font">' + nulMillisec + indexMilliSec + '</p>');
-            $('#timer').prepend('<p id="tijdsec" class="font">' + nulSec + indexTimerSec + ':' + '</p>');
-            $('#timer').prepend('<p id="tijdmin" class="font">' + nulmin + indexTimerMin2 + ':' + '</p>');
+            var verwijder = document.getElementById('tijdmin');
+            $(verwijder).remove();
+            verwijder = document.getElementById('tijdsec');
+            $(verwijder).remove();
+            verwijder = document.getElementById('tijdmillisec');
+            $(verwijder).remove();
+            $('#timer').prepend('<p id="tijdmillisec" class="font">' + nulMillisec + indexMilliSec + '<\/p>');
+            $('#timer').prepend('<p id="tijdsec" class="font">' + nulSec + indexTimerSec + ':' + '<\/p>');
+            $('#timer').prepend('<p id="tijdmin" class="font">' + nulmin + indexTimerMin2 + ':' + '<\/p>');
         }
 
         function timer_tick() {
@@ -128,13 +130,12 @@
             }
             timerplaatsen();
 
-
-            if (indexMilliSec == 10) {
+            if (indexMilliSec === 10) {
                 indexTimerSec = indexTimerSec + 1;
                 indexMilliSec = 0;
             }
 
-            if (indexTimerSec == 60) {
+            if (indexTimerSec === 60) {
                 indexTimerSec = 0;
                 indexTimerMin = indexTimerMin + 1;
 
@@ -142,7 +143,7 @@
         }
 
         function kaarttonen(id) {
-            
+
             $('.' + id).css({
                 'transform': 'rotateY(180deg)',
                 '-webkit-border-radius': '9px',
@@ -150,37 +151,39 @@
                 'border-radius': '9px',
                 '-webkit-box-shadow': 'rgba(0, 0, 0, 0.8) -3px -2px 10px',
                 '-moz-box-shadow': 'rgba(0, 0, 0, 0.8) -3px -2px 10px',
-                'box-shadow': 'rgba(0, 0, 0, 0.8) -3px -2px 10px',
+                'box-shadow': 'rgba(0, 0, 0, 0.8) -3px -2px 10px'
 
             });
             $('#vk' + id).css({
                 'border': 'solid 0px black',
                 'background-color': 'white',
                 'margin-left': '-2px',
-                'margin-top': '0px'
+                'margin-top': '0px',
+                'z-index': '-10'
             });
-            $('#hint1' + id +',#hint2' +id+ ',#hint3'+id).css({'opacity': '0','transition': 'opacity 1s 0s',});
+
 
             return;
         }
 
         function kaartomdraaien(id) {
-            
+
             $('.' + id).css({
                 'transform': 'rotateY(0deg)',
                 '-webkit-box-shadow': '',
                 '-moz-box-shadow': '',
                 'box-shadow': '',
                 '-webkit-animation-delay': ' 5s',
-                'animation-delay': ' 5s',
+                'animation-delay': ' 5s'
             });
+
             $('#vk' + id).css({
                 'border': ' solid 1px black',
                 'background-color': 'white',
                 'margin-left': '-1px',
                 'margin-top': '-1px'
             });
-            $('#hint1' + id +',#hint2' +id+ ',#hint3'+id).css({'opacity': '1','transition': 'opacity 1s 0.5s',});
+
             return;
         }
 
@@ -192,16 +195,14 @@
             kaart1 = null;
             kaart2 = null;
             clearTimeout(timerhandeler);
-
         }
 
         function kaartverwijderen(id) {
             $('.' + id).css({
                 'visibility': 'hidden',
                 'opacity': '0',
-                'transition': 'visibility 0s 2s, opacity 2s linear',
+                'transition': 'visibility 0s 2s, opacity 2s linear'
             });
-
             return;
         }
 
@@ -209,30 +210,29 @@
             $('#f1_container').css({
                 'visibility': 'hidden',
                 'opacity': '0',
-                'transition': 'visibility 0s 2s, opacity 2s linear',
+                'transition': 'visibility 0s 2s, opacity 2s linear'
             });
-
             return;
         }
-
 
         function notif(status) {
 
             $('<div/>', {
                 'id': 'notif',
-                'class': 'font',
+                'class': 'font'
             }).appendTo('body');
             $('#notif').prepend('<input class="buttons"type="button" value="Replay game" onclick="Reloadgame()" /><br>');
-            if (status == "You Won!") {
-                $('#notif').prepend('<p>Time: ' + indexTimerMin + ' Min ' + indexTimerSec + ' sec' + '</p>');
-                $('#notif').prepend('<p>Cards turned: ' + aantalkaartenomgedraait + '</p>');
+            if (status === "You Won!") {
+                $('#notif').prepend('<p>Time: ' + indexTimerMin + ' Min ' + indexTimerSec + ' sec' + '<\/p>');
+                $('#notif').prepend('<p>Cards turned: ' + aantalkaartenomgedraait + '<\/p>');
             }
-            $('#notif').prepend('<p>' + status + '</p>');
+            $('#notif').prepend('<p>' + status + '<\/p>');
         }
 
         function sound(nr) {
-            if (soundon == true) {
-                if (nr == 1) {
+            if (soundon === true) {
+
+                if (nr === 1) {
                     var audioElement = document.createElement('audio');
                     audioElement.setAttribute('src', 'sound/01-minion-sounds.mp3');
                     audioElement.addEventListener("load", function () {
@@ -240,7 +240,7 @@
                     }, true);
 
                     audioElement.play();
-                } else if (nr == 2) {
+                } else if (nr === 2) {
                     var audioElement = document.createElement('audio');
                     audioElement.setAttribute('src', 'sound/11-minion-sounds.mp3');
                     audioElement.addEventListener("load", function () {
@@ -248,27 +248,23 @@
                     }, true);
 
                     audioElement.play();
-
                 }
             }
-
-
-
-
         }
 
         function kaartenmaken() {
-            var arr = []
+            var arr = [],
+                randomnumber;
             while (arr.length < 30) {
                 if (arr.length < 15) {
-                    var randomnumber = Math.floor((Math.random() * 15) + 1)
+                    randomnumber = Math.floor((Math.random() * 15) + 1);
                 } else {
-                    var randomnumber = Math.floor((Math.random() * 15) + 1)
+                    randomnumber = Math.floor((Math.random() * 15) + 1);
                     randomnumber = randomnumber + 'b';
                 }
                 var found = false;
                 for (var p = 0; p < arr.length; p++) {
-                    if (arr[p] == randomnumber) {
+                    if (arr[p] === randomnumber) {
                         found = true;
                         break
                     }
@@ -276,14 +272,12 @@
                 if (!found) arr[arr.length] = randomnumber;
             }
 
-
-
             var arr1 = []
             while (arr1.length < 30) {
                 var randomnumber = Math.ceil((Math.random() * 30) - 1)
                 var found = false;
                 for (var i = 0; i < arr1.length; i++) {
-                    if (arr1[i] == randomnumber) {
+                    if (arr1[i] === randomnumber) {
                         found = true;
                         break
                     }
@@ -295,8 +289,8 @@
             while (z < 30) {
 
                 var test = arr[arr1[z]].toString();
-                if (test.slice(-1) == 'b') {
-                    if (test == '13b') {
+                if (test.slice(-1) === 'b') {
+                    if (test === '13b') {
                         var trimmed = test;
                     } else {
                         var trimmed = test.slice(0, -1);
@@ -304,64 +298,62 @@
                 } else {
                     var trimmed = test;
                 }
-
-                $('<div/>', {
-                    'id': arr[arr1[z]],
-                    'class': 'shadow f1_card ' + arr[arr1[z]],
-                }).appendTo('#f1_container');
-                $('<div/>', {
-                    'id': 'vk' + arr[arr1[z]],
-                    'class': 'front face',
-                }).appendTo('#' + arr[arr1[z]]);
-                $('<div/>', {
-                    'id': 'ak' + arr[arr1[z]],
-                    'class': 'back face center',
-                }).appendTo('#' + arr[arr1[z]]);
-
-
-                $('<div/>', {
-                    'id': 'hint1' + arr[arr1[z]],
-                    'class': 'hint1',
-                    'onclick': 'openOnImageClick(this.id)',
-                }).appendTo('#vk' + arr[arr1[z]]);
-                $('<div/>', {
-                    'id': 'hint2' + arr[arr1[z]],
-                    'class': 'hint2',
-                    'onclick': 'openOnImageClick(this.id)',
-                }).appendTo('#vk' + arr[arr1[z]]);
-                $('<div/>', {
-                    'id': 'hint3' + arr[arr1[z]],
-                    'class': 'hint3',
-                    'onclick': 'openOnImageClick(this.id)',
-                }).appendTo('#vk' + arr[arr1[z]]);
+                if (jokerson === false && (arr[arr1[z]] == '13' || arr[arr1[z]] == '13b')) {} else {
+                    $('<div/>', {
+                        'id': arr[arr1[z]],
+                        'class': 'shadow f1_card ' + arr[arr1[z]],
+                    }).appendTo('#f1_container');
+                    $('<div/>', {
+                        'id': 'vk' + arr[arr1[z]],
+                        'class': 'front face',
+                    }).appendTo('#' + arr[arr1[z]]);
+                    $('<div/>', {
+                        'id': 'ak' + arr[arr1[z]],
+                        'class': 'back face center',
+                    }).appendTo('#' + arr[arr1[z]]);
 
 
-                $('#ak' + arr[arr1[z]]).prepend('<img class="nodragimg frontimg" src="images/minions' + trimmed + '.png" />');
-                $('#vk' + arr[arr1[z]]).prepend('<img class="nodragimg backimg" id="' + arr[arr1[z]] + '" src="images/kaartachterkant.png" onclick="openOnImageClick(this.id)"/>');
+                    $('<div/>', {
+                        'id': 'hint1' + arr[arr1[z]],
+                        'class': 'hint1',
+                        'onclick': 'openOnImageClick(this.id)',
+                    }).appendTo('#vk' + arr[arr1[z]]);
+                    $('<div/>', {
+                        'id': 'hint2' + arr[arr1[z]],
+                        'class': 'hint2',
+                        'onclick': 'openOnImageClick(this.id)',
+                    }).appendTo('#vk' + arr[arr1[z]]);
+                    $('<div/>', {
+                        'id': 'hint3' + arr[arr1[z]],
+                        'class': 'hint3',
+                        'onclick': 'openOnImageClick(this.id)',
+                    }).appendTo('#vk' + arr[arr1[z]]);
 
-                hintsplaatsen(arr[arr1[z]]);
 
+                    $('#ak' + arr[arr1[z]]).prepend('<img class="nodragimg frontimg" src="images/minions' + trimmed + '.png" />');
+                    $('#vk' + arr[arr1[z]]).prepend('<img class="nodragimg backimg" id="' + arr[arr1[z]] + '" src="images/kaartachterkant.png" onclick="openOnImageClick(this.id)"/>');
 
-
+                    hintsplaatsen(arr[arr1[z]]);
+                }
                 z++;
             }
             return;
         }
 
         function kaartogenbliktonen() {
-            setTimeout(function () {
-                var i = 1;
-                while (i < 31) {
-                    var tel;
-                    if (i > 15) {
-                        tel = i - 15 + 'b'
-                    } else {
-                        tel = i
-                    }
-                    i++;
-                    kaarttonen(tel);
+
+            var i = 1;
+            while (i < 31) {
+                var tel;
+                if (i > 15) {
+                    tel = i - 15 + 'b'
+                } else {
+                    tel = i
                 }
-            }, 1000);
+                i++;
+                kaarttonen(tel);
+            }
+
             setTimeout(function () {
                 var t = 1;
                 while (t < 31) {
@@ -373,15 +365,12 @@
                     }
                     t++;
                     kaartomdraaien(tel);
-
                 }
             }, 3000);
-
         }
 
         $(document).ready(function () {
-            kaartenmaken();
-            kaartogenbliktonen();
+
             onHover();
             offHover();
 
@@ -406,7 +395,6 @@
                     'transition': 'transform 1s 0s',
                 });
             });
-
         }
 
         function offHover() {
@@ -429,35 +417,59 @@
             });
         }
 
+        function Reloadgame() {
+            var verwijder = document.getElementById('f1_container');
+            $(verwijder).remove();
+            verwijder = document.getElementById('notif');
+            $(verwijder).remove();
+            $('<div/>', {
+                'id': 'f1_container'
+            }).appendTo('body');
+
+            reset();
+            aantalkaartenjuist = 0;
+            indexMilliSec = 0;
+            indexTimerSec = 0;
+            indexTimerMin = null;
+            timerplaatsen();
+            kaartenmaken();
+            kaartogenbliktonen();
+            obj.Stop();
+
+
+        }
+
         function openOnImageClick(id) {
-            if (indexTimerMin == null) {
+            if (indexTimerMin === null) {
                 indexTimerMin = 0;
                 obj.Interval = 100;
                 obj.Tick = timer_tick;
                 obj.Start();
             }
-            if (id.substr(0, 4) == 'hint') {
+            if (id.substr(0, 4) === 'hint') {
                 id = id.substr(5)
             }
             aantalkaartenomgedraait = aantalkaartenomgedraait + 1;
-            if (id == '13b') {
+            if (id === '13b') {
                 kaarttonen(id);
-
                 setTimeout(function () {
-                    sound("2")
+                    sound(2);
+                    kaartogenbliktonen();
                 }, 800);
                 setTimeout(function () {
-                    kaartogenbliktonen();
+
                     kaartverwijderen(id);
                 }, 1500);
                 reset()
 
-            } else if (id == '13') {
+            } else if (id === '13') {
                 kaarttonen(id);
+                setTimeout(function () {
+                    sound(1);
+                }, 1400);
                 setTimeout(function () {
                     kaartverwijderen(id);
                     kaartenweg();
-                    sound(1);
                     notif("Oouuhh..");
                     obj.Stop();
                 }, 1500);
@@ -466,7 +478,7 @@
                     reset();
                 }
 
-                if (kaartteller == 0 || kaartteller == 1) {
+                if (kaartteller === 0 || kaartteller === 1) {
                     switch (kaartteller) {
                     case 0:
                         kaart1 = id;
@@ -483,15 +495,15 @@
 
                     $("#vk" + id).removeClass("font");
 
-                    if (kaartteller == 2) {
-                        if (kaart1 + 'b' == kaart2 || kaart1 == kaart2 + 'b') {
+                    if (kaartteller === 2) {
+                        if (kaart1 + 'b' === kaart2 || kaart1 === kaart2 + 'b') {
                             timerhandeler = setTimeout(function () {
                                 kaartverwijderen(kaart1);
                                 kaartverwijderen(kaart2);
                                 kaartteller = 0;
                                 aantalkaartenjuist = aantalkaartenjuist + 1;
                                 console.log(aantalkaartenjuist);
-                                if (aantalkaartenjuist == 14) {
+                                if (aantalkaartenjuist === 14) {
                                     notif("You Won!");
                                     obj.Stop();
                                 }
@@ -510,7 +522,6 @@
                     }
                 }
             }
-
         }
     </script>
     <title>Titel van de webpagina</title>
@@ -531,6 +542,8 @@
             user-drag: none;
             -webkit-touch-callout: none;
             margin: 0;
+            background-image: url('images/Background.jpg');
+            background-color: rgba(255, 255, 255, 0.1);
         }
         
         #f1_container {
@@ -543,7 +556,7 @@
         
         #f1_container {
             perspective: 1000;
-            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
             -webkit-perspective: 1000;
         }
         
@@ -573,7 +586,6 @@
             -webkit-box-shadow: rgba(0, 0, 0, 0.8) 3px 2px 10px;
             -moz-box-shadow: rgba(0, 0, 0, 0.8) 3px 2px 10px;
             box-shadow: rgba(0, 0, 0, 0.8) 3px 2px 10px;
-            
         }
         
         .face {
@@ -582,16 +594,14 @@
             height: 100%;
             backface-visibility: hidden;
             overflow: hidden;
-                        
-    /* Drop shadow around the card */
-    -webkit-box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
-    /* Make sure that users will not be able to select anything on the card */
-    
-    /* We create the card by stacking two div elements at the exact same location. The back of the card 
+            /* Drop shadow around the card */
+            -webkit-box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
+            /* Make sure that users will not be able to select anything on the card */
+            /* We create the card by stacking two div elements at the exact same location. The back of the card 
        is shown when we rotated the card 180 degrees along the y-axis. Setting this property to hidden
        ensures that the "back side" is hidden when the card is flipped
     */
-    -webkit-backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
         }
         
         .face.back {
@@ -614,7 +624,7 @@
             -webkit-user-drag: none;
             -webkit-user-select: none;
             -ms-user-select: none;
-                z-index: 2;
+            z-index: 2;
         }
         
         .frontimg {
@@ -633,42 +643,32 @@
         .hint {
             width: 100%;
             height: 100%;
+            position: relative;
+            background-color: transparent;
+            border: solid 1px transparent;
+            z-index: 0;
+            display: block;
         }
         
         .hint1 {
-            position: relative;
             height: 14%;
             width: 20%;
-            background-color: transparent;
             margin-left: 23%;
-            margin-top: -75%;
-            border: solid 1px transparent;
-            z-index: 0;
-            display: block;
+            margin-top: -74.8%;
         }
         
         .hint2 {
-            position: relative;
             height: 14%;
             width: 20%;
-            background-color: transparent;
             margin-left: 29%;
-            margin-top: -83%;
-            border: solid 1px transparent;
-            z-index: 0;
-            display: block;
+            margin-top: -82%;
         }
         
         .hint3 {
-            position: relative;
             height: 14%;
             width: 20%;
-            background-color: transparent;
             margin-left: 76%;
-            margin-top: 38%;
-            border: solid 1px transparent;
-            z-index: 0;
-            display: block;
+            margin-top: 40%;
         }
         
         #notif {
@@ -689,6 +689,7 @@
             margin-right: auto;
             top: 40%;
             text-align: center;
+            background-color: rgba(255, 255, 255, 0.95);
         }
         
         .font {
@@ -700,7 +701,6 @@
             -webkit-box-sizing: content-box;
             -moz-box-sizing: content-box;
             box-sizing: content-box;
-            cursor: pointer;
             color: #fcdf07;
             text-align: center;
             -o-text-overflow: clip;
@@ -716,8 +716,9 @@
             text-align: center;
             width: auto;
             border-bottom: solid 1px rgba(0, 0, 0, 0.7);
-            height: 170px;
+            height: 140px;
             width: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
         }
         
         #tijdmin {
@@ -733,10 +734,10 @@
         }
         
         #timer {
-            margin: auto;
+            position: absolute;
             width: 289px;
             max-height: 40px;
-            margin-top: -50px;
+            left: 45%;
         }
         
         #Menuimg1 {
@@ -753,7 +754,8 @@
             z-index: 10;
             background-color: white;
             left: -150px;
-            top: 120px;
+            top: 140px;
+            background-color: rgba(255, 255, 255, 0.9);
         }
         
         html,
@@ -766,6 +768,8 @@
             display: block;
             margin: auto;
             margin-top: 200px;
+            cursor: pointer;
+            cursor: hand;
         }
         
         #hintsaan {
@@ -773,6 +777,17 @@
             margin: auto;
             width: 60%;
             margin-top: 50px;
+            cursor: pointer;
+            cursor: hand;
+        }
+        
+        #jokersaan {
+            display: block;
+            margin: auto;
+            width: 60%;
+            margin-top: 50px;
+            cursor: pointer;
+            cursor: hand;
         }
         
         .buttons {
@@ -790,18 +805,270 @@
         }
         
         .buttons:hover {
-            font-size: 19px;
+            font-size: 18px;
             background-color: rgba(255, 255, 255, 0.3);
             color: black;
         }
+        
+        #uitlegdiv {
+            width: 100%;
+            height: 983px;
+            z-index: 20;
+            position: fixed;
+            background-color: rgba(0, 0, 0, 0.7);
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+        
+        #rulesdiv {
+            width: 50%;
+            height: 750px;
+            background-color: rgba(255, 255, 255, 0.92);
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 120px;
+            border-radius: 5px;
+        }
+        
+        .rulesfonthelp {
+            font-size: 76px;
+            margin-top: 10px;
+            margin: 0 auto;
+            display: block;
+            margin-left: 50px;
+        }
+        
+        .rulesfont {
+            font-size: 76px;
+            margin-top: 10px;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        #closehelpid {
+            float: right;
+            margin-right: 24px;
+            cursor: pointer;
+            cursor: hand;
+            display: block;
+        }
+        .uitlegfont{
+        font-size:21px;
+            text-shadow:none; 
+            letter-spacing:normal;
+        
+        }
+        .uitlegtekstachtergrond{
+        
+        background-color: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding-right: 15px;
+        }
+        #browsers{
+        
+       margin-top: 495px;
+        height: 90px;
+            width:90%;
+            margin-left:auto;
+            margin-right:auto;
+            padding: auto;
+        
+        }
+        .positioning1{
+            float:right; 
+            margin-right:50px;
+        }
+        .positioning2{
+                width:     90%;
+   
+        }
+        @media only screen and (max-device-width: 750px) and (min-device-width : 666px)  {
+            
+            #rulesdiv {
+                width: 90%;
+                    height: auto;
+                
+            }
+            #uitlegdiv {
+                height: auto;
+                position: absolute;
+                height: auto;
+            }
+            .uitlegtekstachtergrond {    height: 100%;}
+            #browsers {
+                    margin-top: 0px;
+            }
+            .positioning1{
+                    float: none;
+                    width: 82%;
+    height: 45%;
+    margin-left: 50px;
+                margin-top:50px; 
+            }
+            .positioning2{
+                    width: 100%;
+    height: 1335px;
+            }
+       
+            .f1_card {
+    width: 96px;
+                height: 126px;}
+                 .infocardslinks{
+                margin-left: 20%;
+                    width: 132px;
+    height: 178px;
+                
+            }
+            .infocardsrechts{
+                    width: 132px;
+    height: 178px;
+                
+                
+            }
+            #f1_container {
+        height: 846px;
+                width: 94%;}
+            #timer{
+                left: 33%;
+            }
+            
+        }
+        
     </style>
 </head>
 
 
 <body>
+    <div id='uitlegdiv'>
+        <div id='rulesdiv'>
+            <br>
+            <img src="images/close.png" id="closehelpid" onclick="closehelp()">
+            <script>
+                function closehelp() {
+
+                    if (gamestart === false) {
+
+                        kaartenmaken();
+                        kaartogenbliktonen();
+                        gamestart = true;
+                    }
+                    if (helpopen === true) {
+
+
+                        $('#rulesdiv').css({
+                            'margin-top': '-100%',
+                            'transition': 'margin-top 1s 0s',
+                        });
+                        $('#uitlegdiv').css({
+                            'visibility': 'hidden',
+                            'transition': 'visibility 0s 0.5s',
+                        });
+                        helpopen = false
+
+                    } else {
+
+                        $('#rulesdiv').css({
+                            'margin-top': '120px',
+                            'transition': 'margin-top 1s 0s',
+                        });
+                        $('#uitlegdiv').css({
+                            'visibility': 'visible',
+                            'transition': 'visibility 0s 0.5s',
+                        });
+
+
+
+                        helpopen = true
+                    }
+
+                }
+            </script>
+            <span class="font rulesfonthelp">Info</span>
+            <br>
+            <br>
+
+            <div class="positioning2"style=''>
+
+
+                <div class="positioning1" style="">
+                      <div class="uitlegtekstachtergrond">
+                    <span class="font rulesfont" style="">Hints</span>
+                    <br>
+
+
+                    <div class="shadow f1_card infocardslinks" style="">
+                        <div class="front face" style="border: 1px solid black; margin-left: -1px; margin-top: -1px; z-index: -10; background-color: white; ">
+                            <img class="nodragimg backimg" src="images/minions1.png" style='width:95%; height:97%;'>
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="shadow f1_card infocardsrechts" style="">
+                      
+                        <div class="front face" style="">
+                            <img class="nodragimg backimg" src="images/kaartachterkant.png">
+                            <div class="hint1">
+                                <img class="nodragimg hint" src="images/hint1/1.4.png">
+                            </div>
+                            <div class="hint2">
+                                <img class="nodragimg hint" src="images/hint2/2.3.png">
+                            </div>
+                            <div class="hint3">
+                                <img class="nodragimg hint" src="images/hint3/2.1.png">
+                            </div>
+                        </div>
+                       
+
+                    </div>
+                     <br>
+                        <p class="font uitlegfont">testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br></p></div>
+                </div>
+
+
+
+                <div class="positioning1">
+<div class="uitlegtekstachtergrond">
+                    <span class="font rulesfont ">Jokers</span>
+                    <br>
+
+
+                    <div class="shadow f1_card infocardslinks" style="">
+                        <div class="front face" style="border: 1px solid black; margin-left: -1px; margin-top: -1px; z-index: -10; background-color: white; ">
+                            <img class="nodragimg backimg" src="images/minions13.png">
+                        </div>
+
+                    </div>
+                    <div class="shadow f1_card infocardsrechts">
+                        <div class="front face" style="border: 1px solid black; margin-left: -1px; margin-top: -1px; z-index: -10; background-color: white;">
+                            <img class="nodragimg backimg" src="images/minions13b.png" style='width:95%; height:97%;'>
+                        </div>
+
+                    </div>
+<br>
+                       <p class="font uitlegfont">testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br></p></div>
+                </div>
+                 
+
+            </div>
+        <div id="browsers" class="uitlegtekstachtergrond"> 
+            <img src="images/chrome.png" height="80" style="margin-left:calc(17% - 80px);"> 
+            <img src="images/opera.png" height="80" style="margin-left:calc(25% - 80px);"> 
+            <img src="images/Firefox.png" height="80" style="margin-left:calc(25% - 80px);"> 
+            <img src="images/Internet-Explorer.png" height="80" style="margin-left:calc(25% - 80px);">
+            </div>
+            <br>
+        </div>
+         <br>
+    </div>
     <img id="Menuimg1" class="Menuimg" src="images/menu.png" onmouseout="offHover()" onmouseover="onHover()" style="transform: rotate(0deg); transition: transform 1s 0s, opacity 0s linear;">
-    <div id='Menudiv' class="Menuimg" onmouseout="offHover()" onmouseover="onHover()" style="left: -150px; transition: left 1s 0s, opacity 0s linear;"><img id='sound' onclick="soundcontrol()" src="images/soundon.png">
-        <br><img id='hintsaan' onclick="hints();" src="images/hintson.png">
+    <img src="images/doc_lines_icon&48.png" style="float:right;margin:50px;" onclick="closehelp()">
+    <div id='Menudiv' class="Menuimg" onmouseout="offHover()" onmouseover="onHover()" style="left: -150px; transition: left 1s 0s, opacity 0s linear;">
+        <img id='sound' onclick="soundcontrol()" src="images/soundon.png">
+        <br>
+        <img id='hintsaan' onclick="hints();" src="images/hintson.png">
+        <img id='jokersaan' onclick="jokers();" src="images/joker.jpg">
         <input class="buttons" type="button" value="Reload game" onclick="Reloadgame()" />
     </div>
     <div id='bovenbalk'>
@@ -809,7 +1076,7 @@
             <p id="tijdmillisec" class="font">00:</p>
             <p id="tijdsec" class="font">00:</p>
             <p id="tijdmin" class="font">00</p>
-           
+
         </div>
     </div>
 
