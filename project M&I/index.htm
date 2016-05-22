@@ -21,27 +21,51 @@
         var obj = new Timer();
         var soundon = true;
         var hintson = true;
-        
-        
-        function hints(){
-        if(hintson == true){
-            $("#hintsaan").attr("src","images/hintsoff.png");
-            hintson = false;}
-             else{
-            $("#hintsaan").attr("src","images/hintson.png");
-             hintson = true;
-             }
-        
+        var nulMillisec;
+        var nulSec;
+        var nulmin;
+        var indexTimerMin2
+
+        function Reloadgame() {
+
+            $("#f1_container").remove();
+            $("#notif").remove();
+            $('<div/>', {
+                'id': 'f1_container',
+            }).appendTo('body');
+            obj.Stop();
+            indexMilliSec = 0;
+            indexTimerSec = 0;
+            indexTimerMin = null;
+            timerplaatsen();
+            kaartenmaken();
+            kaartogenbliktonen();
+
+
+
         }
-         function soundcontrol(){
-         if(soundon == true){
-            $("#sound").attr("src","images/soundoff.png");
-            soundon = false;}
-             else{
-            $("#sound").attr("src","images/soundon.png");
-             soundon = true;
-             }
+
+        function hints() {
+            if (hintson == true) {
+                $("#hintsaan").attr("src", "images/hintsoff.png");
+                hintson = false;
+            } else {
+                $("#hintsaan").attr("src", "images/hintson.png");
+                hintson = true;
+            }
+
         }
+
+        function soundcontrol() {
+            if (soundon == true) {
+                $("#sound").attr("src", "images/soundoff.png");
+                soundon = false;
+            } else {
+                $("#sound").attr("src", "images/soundon.png");
+                soundon = true;
+            }
+        }
+
         function Timer() {
 
             this.Interval = 1000;
@@ -66,16 +90,27 @@
 
         }
 
+        function timerplaatsen() {
+            if (indexTimerMin == null) {
+                indexTimerMin2 = 0;
+                 nulMillisec = "0";
+                nulSec = "0";
+                 nulmin = "0";
+            } else {
+                indexTimerMin2 = indexTimerMin
+            }
+            document.getElementById("tijdmin").remove();
+            document.getElementById("tijdsec").remove();
+            document.getElementById("tijdmillisec").remove();
+            $('#timer').prepend('<p id="tijdmillisec" class="font">' + nulMillisec + indexMilliSec + '</p>');
+            $('#timer').prepend('<p id="tijdsec" class="font">' + nulSec + indexTimerSec + ':' + '</p>');
+            $('#timer').prepend('<p id="tijdmin" class="font">' + nulmin + indexTimerMin2 + ':' + '</p>');
+        }
 
         function timer_tick() {
 
             indexMilliSec = indexMilliSec + 1;
-            document.getElementById("tijdmin").remove();
-            document.getElementById("tijdsec").remove();
-            document.getElementById("tijdmillisec").remove();
-            var nulMillisec;
-            var nulSec;
-            var nulmin;
+
             if (indexMilliSec < 10) {
                 nulMillisec = 0;
             } else {
@@ -86,15 +121,12 @@
             } else {
                 nulSec = "";
             }
-            if (indexTimerMin < 10) {
+            if (indexTimerMin2 < 10) {
                 nulmin = 0;
             } else {
                 nulmin = "";
             }
-            $('#timer').prepend('<p id="tijdmillisec" class="font">' + nulMillisec + indexMilliSec + '</p>');
-
-            $('#timer').prepend('<p id="tijdsec" class="font">' + nulSec + indexTimerSec + ':' + '</p>');
-            $('#timer').prepend('<p id="tijdmin" class="font">' + nulmin + indexTimerMin + ':' + '</p>');
+            timerplaatsen();
 
 
             if (indexMilliSec == 10) {
@@ -110,11 +142,12 @@
         }
 
         function kaarttonen(id) {
+            
             $('.' + id).css({
                 'transform': 'rotateY(180deg)',
-                '-webkit-border-radius': '20px',
-                '-moz-border-radius': '20px',
-                'border-radius': '20px',
+                '-webkit-border-radius': '9px',
+                '-moz-border-radius': '9px',
+                'border-radius': '9px',
                 '-webkit-box-shadow': 'rgba(0, 0, 0, 0.8) -3px -2px 10px',
                 '-moz-box-shadow': 'rgba(0, 0, 0, 0.8) -3px -2px 10px',
                 'box-shadow': 'rgba(0, 0, 0, 0.8) -3px -2px 10px',
@@ -126,11 +159,13 @@
                 'margin-left': '-2px',
                 'margin-top': '0px'
             });
+            $('#hint1' + id +',#hint2' +id+ ',#hint3'+id).css({'opacity': '0','transition': 'opacity 1s 0s',});
 
             return;
         }
 
         function kaartomdraaien(id) {
+            
             $('.' + id).css({
                 'transform': 'rotateY(0deg)',
                 '-webkit-box-shadow': '',
@@ -145,7 +180,7 @@
                 'margin-left': '-1px',
                 'margin-top': '-1px'
             });
-
+            $('#hint1' + id +',#hint2' +id+ ',#hint3'+id).css({'opacity': '1','transition': 'opacity 1s 0.5s',});
             return;
         }
 
@@ -179,7 +214,7 @@
 
             return;
         }
-       
+
 
         function notif(status) {
 
@@ -187,6 +222,7 @@
                 'id': 'notif',
                 'class': 'font',
             }).appendTo('body');
+            $('#notif').prepend('<input class="buttons"type="button" value="Replay game" onclick="Reloadgame()" /><br>');
             if (status == "You Won!") {
                 $('#notif').prepend('<p>Time: ' + indexTimerMin + ' Min ' + indexTimerSec + ' sec' + '</p>');
                 $('#notif').prepend('<p>Cards turned: ' + aantalkaartenomgedraait + '</p>');
@@ -195,28 +231,28 @@
         }
 
         function sound(nr) {
-            if(soundon == true){
-            if (nr == 1) {
-                var audioElement = document.createElement('audio');
-                audioElement.setAttribute('src', 'sound/01-minion-sounds.mp3');
-                audioElement.addEventListener("load", function () {
+            if (soundon == true) {
+                if (nr == 1) {
+                    var audioElement = document.createElement('audio');
+                    audioElement.setAttribute('src', 'sound/01-minion-sounds.mp3');
+                    audioElement.addEventListener("load", function () {
+                        audioElement.play();
+                    }, true);
+
                     audioElement.play();
-                }, true);
+                } else if (nr == 2) {
+                    var audioElement = document.createElement('audio');
+                    audioElement.setAttribute('src', 'sound/11-minion-sounds.mp3');
+                    audioElement.addEventListener("load", function () {
+                        audioElement.play();
+                    }, true);
 
-                audioElement.play();
-            } else if (nr == 2) {
-                var audioElement = document.createElement('audio');
-                audioElement.setAttribute('src', 'sound/11-minion-sounds.mp3');
-                audioElement.addEventListener("load", function () {
                     audioElement.play();
-                }, true);
 
-                audioElement.play();
+                }
+            }
 
-            }
-            }
-            
-            
+
 
 
         }
@@ -348,7 +384,7 @@
             kaartogenbliktonen();
             onHover();
             offHover();
-      
+
 
         });
         var divvisible;
@@ -501,12 +537,14 @@
             position: relative;
             margin: 10px auto;
             width: 50%;
-            height: 1100px;
+            height: 900px;
             z-index: 1;
         }
         
         #f1_container {
             perspective: 1000;
+            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            -webkit-perspective: 1000;
         }
         
         .f1_card {
@@ -517,6 +555,9 @@
             margin-bottom: 15px;
             margin-left: 15px;
             float: left;
+            -webkit-transition-property: -webkit-transform;
+            -webkit-transition-duration: 1s;
+            -webkit-transform-style: preserve-3d;
         }
         
         .front {
@@ -532,6 +573,7 @@
             -webkit-box-shadow: rgba(0, 0, 0, 0.8) 3px 2px 10px;
             -moz-box-shadow: rgba(0, 0, 0, 0.8) 3px 2px 10px;
             box-shadow: rgba(0, 0, 0, 0.8) 3px 2px 10px;
+            
         }
         
         .face {
@@ -540,6 +582,16 @@
             height: 100%;
             backface-visibility: hidden;
             overflow: hidden;
+                        
+    /* Drop shadow around the card */
+    -webkit-box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
+    /* Make sure that users will not be able to select anything on the card */
+    
+    /* We create the card by stacking two div elements at the exact same location. The back of the card 
+       is shown when we rotated the card 180 degrees along the y-axis. Setting this property to hidden
+       ensures that the "back side" is hidden when the card is flipped
+    */
+    -webkit-backface-visibility: hidden;
         }
         
         .face.back {
@@ -552,6 +604,7 @@
             border: solid 1px black;
             border-radius: 9px;
             background-color: white;
+            -webkit-transform: rotateY(180deg);
         }
         
         .nodragimg {
@@ -561,6 +614,7 @@
             -webkit-user-drag: none;
             -webkit-user-select: none;
             -ms-user-select: none;
+                z-index: 2;
         }
         
         .frontimg {
@@ -589,6 +643,8 @@
             margin-left: 23%;
             margin-top: -75%;
             border: solid 1px transparent;
+            z-index: 0;
+            display: block;
         }
         
         .hint2 {
@@ -599,6 +655,8 @@
             margin-left: 29%;
             margin-top: -83%;
             border: solid 1px transparent;
+            z-index: 0;
+            display: block;
         }
         
         .hint3 {
@@ -609,11 +667,13 @@
             margin-left: 76%;
             margin-top: 38%;
             border: solid 1px transparent;
+            z-index: 0;
+            display: block;
         }
         
         #notif {
             position: absolute;
-            width: 250px;
+            width: 40%;
             height: auto;
             min-height: 100px;
             background: white;
@@ -656,8 +716,8 @@
             text-align: center;
             width: auto;
             border-bottom: solid 1px rgba(0, 0, 0, 0.7);
-            height: 145px;
-            width: 95%;
+            height: 170px;
+            width: 100%;
         }
         
         #tijdmin {
@@ -674,44 +734,65 @@
         
         #timer {
             margin: auto;
-            width: 259px;
+            width: 289px;
+            max-height: 40px;
             margin-top: -50px;
         }
         
         #Menuimg1 {
-            position: fixed;
+            position: absolute;
             z-index: 11;
+            top: 20px;
+            left: 20px;
         }
         
         #Menudiv {
-            width: 150px;
-            height: 110%;
-            position: fixed;
+            width: 151px;
+            height: 100%;
+            position: absolute;
             z-index: 10;
             background-color: white;
             left: -150px;
-            top: -30px;
+            top: 120px;
         }
-        html, body{
-width:100%; 
-height:100%;
-}
-        #sound{
+        
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+        
+        #sound {
             display: block;
-    margin: auto;
+            margin: auto;
             margin-top: 200px;
-
-        
-            
         }
-        #hintsaan{
-            
-            display: block;
-    margin: auto;
-            width: 60%;
-             margin-top: 50px;
-
         
+        #hintsaan {
+            display: block;
+            margin: auto;
+            width: 60%;
+            margin-top: 50px;
+        }
+        
+        .buttons {
+            width: auto;
+            margin: auto;
+            display: block;
+            height: 36px;
+            margin-top: 50px;
+            border-radius: 7px;
+            border: solid 1px silver;
+            background-color: transparent;
+            font-family: fantasy;
+            color: silver;
+            font-size: 18px;
+        }
+        
+        .buttons:hover {
+            font-size: 19px;
+            background-color: rgba(255, 255, 255, 0.3);
+            color: black;
         }
     </style>
 </head>
@@ -719,20 +800,22 @@ height:100%;
 
 <body>
     <img id="Menuimg1" class="Menuimg" src="images/menu.png" onmouseout="offHover()" onmouseover="onHover()" style="transform: rotate(0deg); transition: transform 1s 0s, opacity 0s linear;">
-    <div id='Menudiv' class="Menuimg"  onmouseout="offHover()" onmouseover="onHover()"style="left: -150px; transition: left 1s 0s, opacity 0s linear;"><img id='sound' onclick="soundcontrol()" src="images/soundon.png"  ><br><img id='hintsaan' onclick="hints();" src="images/hintson.png"  ></div>
-    <div id="f1_container">.
-        <div id='bovenbalk'>
-            <div id='timer'>
-                <p id="tijdmillisec" class="font">00:</p>
-                <p id="tijdsec" class="font">00:</p>
-                <p id="tijdmin" class="font">00</p>
-                </br>
-                </br>
-            </div>
-
+    <div id='Menudiv' class="Menuimg" onmouseout="offHover()" onmouseover="onHover()" style="left: -150px; transition: left 1s 0s, opacity 0s linear;"><img id='sound' onclick="soundcontrol()" src="images/soundon.png">
+        <br><img id='hintsaan' onclick="hints();" src="images/hintson.png">
+        <input class="buttons" type="button" value="Reload game" onclick="Reloadgame()" />
+    </div>
+    <div id='bovenbalk'>
+        <div id='timer'>
+            <p id="tijdmillisec" class="font">00:</p>
+            <p id="tijdsec" class="font">00:</p>
+            <p id="tijdmin" class="font">00</p>
+           
         </div>
-        <br>
-        <br>
+    </div>
+
+    <div id="f1_container">
+
+
     </div>
 
 </body>
