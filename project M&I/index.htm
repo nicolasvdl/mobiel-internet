@@ -514,40 +514,41 @@
                 }
             }
         }
-                        function closehelp() {
-                    if (gamestart === false) {
-                        kaartenmaken();
-                        kaartogenbliktonen();
-                        gamestart = true;
-                    }
-                    if (helpopen === true) {
-                        $('#rulesdiv').css({
-                            'margin-top': '-100%',
-                            'visibility': 'hidden',
-                            'height': '400px'
-                        });
-                        $('#uitlegdiv').css({
-                            'visibility': 'hidden',
-                        });
-                        $('.uitlegfont').css({
-                            'visibility': 'hidden',
-                        });
-                        helpopen = false
-                    } else {
-                        $('#rulesdiv').css({
-                            'margin-top': '120px',
-                            'visibility': 'visible',
-                            'height': 'auto'
-                        });
-                        $('#uitlegdiv').css({
-                            'visibility': 'visible',
-                        });
-                        $('.uitlegfont').css({
-                            'visibility': 'visible',
-                        });
-                     helpopen = true
-                    }
-                }
+
+        function closehelp() {
+            if (gamestart === false) {
+                kaartenmaken();
+                kaartogenbliktonen();
+                gamestart = true;
+            }
+            if (helpopen === true) {
+                $('#rulesdiv').css({
+                    'margin-top': '-100%',
+                    'visibility': 'hidden',
+                    'height': '400px'
+                });
+                $('#uitlegdiv').css({
+                    'visibility': 'hidden',
+                });
+                $('.uitlegfont').css({
+                    'visibility': 'hidden',
+                });
+                helpopen = false
+            } else {
+                $('#rulesdiv').css({
+                    'margin-top': '120px',
+                    'visibility': 'visible',
+                    'height': 'auto'
+                });
+                $('#uitlegdiv').css({
+                    'visibility': 'visible',
+                });
+                $('.uitlegfont').css({
+                    'visibility': 'visible',
+                });
+                helpopen = true
+            }
+        }
     </script>
     <title>Memory game</title>
     <style>
@@ -1143,6 +1144,18 @@
                 position: absolute;
                 z-index: 11;
                 margin: 0px;
+            }
+            .hint1 {
+                margin-left: 23%;
+                margin-top: -77.9%;
+            }
+            .hint2 {
+                margin-left: 28.8%;
+                margin-top: -84%;
+            }
+            .hint3 {
+                margin-left: 77%;
+                margin-top: 42%;
             }
         }
         
