@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="beschrijving van de webpagina">
+    <meta name="keywords" content="trefwoorden, gescheiden, door, komma's">
+    <meta name="viewport" content="width=device-width, height=device-height" />
+    <script src="jquery-1.12.1.min.js"></script>
+    <script>
+        var kaartteller = 0;
+        var kaart1;
+        var kaart2;
+
+        function kaarttonen(id) {
+            $('.' + id).css({
+                'transform': 'rotateY(180deg)',
+                '-webkit-border-radius': '20px',
+                '-moz-border-radius': '20px',
+                'border-radius': '20px',
+                '-webkit-box-shadow': 'rgba(0, 0, 0, 0.8) -3px -2px 10px',
+                '-moz-box-shadow': 'rgba(0, 0, 0, 0.8) -3px -2px 10px',
+                'box-shadow': 'rgba(0, 0, 0, 0.8) -3px -2px 10px',
+             
+               
+            });
+            $('#vk' + id).css({ 
+                'border': 'solid 0px black',
+                'background-color':'white',
+                'margin-left':'-2px',
+                'margin-top':'0px'
+            });
+            return;
+        }
+
+        function kaartomdraaien(id) {
+            $('.' + id).css({
+                'transform': 'rotateY(0deg)',
+                '-webkit-box-shadow': '',
+                '-moz-box-shadow': '',
+                'box-shadow': '',
+                '-webkit-animation-delay': ' 5s',
+                'animation-delay': ' 5s',
+            });
+                 $('#vk' + id).css({
+                'border': ' solid 1px black',
+                'background-color':'white',
+                'margin-left':'-1px',
+                'margin-top':'-1px'
+            });
+            return;
+        }
+
+        function kaartverwijderen(id) {
+            $('.' + id).css({
+                'visibility': 'hidden',
+                'opacity': '0',
+                'transition': 'visibility 0s 2s, opacity 2s linear',
+            });
+            return;
+        }
+
+        function kaartenmaken() {
+            var arr = []
+            while (arr.length < 30) {
+                if (arr.length < 15) {
+                    var randomnumber = Math.floor((Math.random() * 15) + 1)
+                } else {
+                    var randomnumber = Math.floor((Math.random() * 15) + 1)
+                    randomnumber = randomnumber + 'b';
+                }
+                var found = false;
+                for (var p = 0; p < arr.length; p++) {
+                    if (arr[p] == randomnumber) {
+                        found = true;
+                        break
+                    }
+                }
+                if (!found) arr[arr.length] = randomnumber;
+            }
+
+            var arr1 = []
+            while (arr1.length < 30) {
+                var randomnumber = Math.ceil((Math.random() * 30) - 1)
+                var found = false;
+                for (var i = 0; i < arr1.length; i++) {
+                    if (arr1[i] == randomnumber) {
+                        found = true;
+                        break
+                    }
+                }
+                if (!found) arr1[arr1.length] = randomnumber;
+            }
+            var z = 0;
+
+            while (z < 30) {
+
+                var test = arr[arr1[z]].toString();
+                if (test.slice(-1) == 'b') {
+                    var trimmed = test.slice(0, -1);
+                } else {
+                    var trimmed = test;
+                }
+                
+                $('<div/>', {
+                    'id': arr[arr1[z]],
+                    'class': 'shadow f1_card ' + arr[arr1[z]],
+                    'style': ' margin-bottom:15px; margin-left:15px; float:left; ',
+                }).appendTo('#f1_container');
+                $('<div/>', {
+                    'id': 'vk' + arr[arr1[z]],
+                    'class': 'front face',
+                    'style': ' border:solid 1px black; border-radius:9px; background-color:white;',
+                }).appendTo('#' + arr[arr1[z]]);
+                $('<div/>', {
+                    'id': 'ak' + arr[arr1[z]],
+                    'class': 'back face center',
+                    'style': ' border:solid 1px black; border-radius:9px; background-color:white;',
+                }).appendTo('#' + arr[arr1[z]]);
+               
+                
+                $('<div/>', {
+                    'id':'hint1'+arr[arr1[z]],
+                    'class': 'hint1',
+                    'style': ' position: relative;height: 14%;width: 20%;background-color: transparent;margin-left: 23%;margin-top: -75%;border: solid 1px transparent;',
+                }).appendTo('#vk' + arr[arr1[z]]);
+                $('<div/>', {
+                    'id':'hint2'+arr[arr1[z]],
+                    'class': 'hint2',
+                    'style': ' position: relative;height: 14%;width: 20%;background-color: transparent;margin-left: 29%;margin-top: -83%;border: solid 1px transparent;',
+                }).appendTo('#vk' + arr[arr1[z]]);
+                $('<div/>', {
+                    'id':'hint3'+arr[arr1[z]],
+                    'class': 'hint3',
+                    'style': ' position: relative;height: 14%;width: 20%;background-color: transparent;margin-left: 76%;margin-top: 38%;border: solid 1px transparent;',
+                }).appendTo('#vk' + arr[arr1[z]]);
+                
+                
+                $('#ak' + arr[arr1[z]]).prepend('<img style="max-width:100%;max-height:100%;" src="images/minions' + trimmed + '.png" />');
+                $('#vk' + arr[arr1[z]]).prepend('<img style="width: 100%;margin-top: 5px; margin-left: 5px; height: 100%;z-index: 0;" id="' + arr[arr1[z]] + '" src="images/kaartachterkant.png" onclick="openOnImageClick(this.id)"/>');
+                
+                if(arr[arr1[z]] == '1' || arr[arr1[z]] == '1b' || arr[arr1[z]] == '4'|| arr[arr1[z]] == '4b'|| arr[arr1[z]] == '12'|| arr[arr1[z]] == '12b')
+                { 
+                    
+                    var R = Math.floor((Math.random() * 6) + 1);
+                    console.log(R);
+                    switch (R) {
+                    case 1:
+                        var hint1 = '1.3.png';
+                        var hint2 = '2.4.png';
+                        var hint3 = '2.1.png';
+                            
+                        break;
+                    case 2:
+                        var hint1 = '1.3.png';
+                        var hint2 = '2.1.png';
+                        var hint3 = '2.4.png';
+                        
+                        break;
+                    case 3:
+                        var hint1 = '1.4.png';
+                        var hint2 = '2.3.png';
+                        var hint3 = '2.1.png';
+                            
+                        break;
+                    case 4:
+                        var hint1 = '1.4.png';
+                        var hint2 = '2.1.png';
+                        var hint3 = '2.3.png';
+                        
+                        break;
+                    case 5:
+                        var hint1 = '1.1.png';
+                        var hint2 = '2.3.png';
+                        var hint3 = '2.4.png';
+                        
+                        break;
+                    case 6:
+                        var hint1 = '1.1.png';
+                        var hint2 = '2.4.png';
+                        var hint3 = '2.3.png';
+                        
+                        break;
+                    default:
+                        
+                    }
+                    $('#hint1'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint1/'+hint1+'" />');
+                    $('#hint2'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint2/'+hint2+'" />');
+                    $('#hint3'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint3/'+hint3+'" />');
+                }
+                 if(arr[arr1[z]] == '2' || arr[arr1[z]] == '2b' || arr[arr1[z]] == '3'|| arr[arr1[z]] == '3b'|| arr[arr1[z]] == '10'|| arr[arr1[z]] == '10b'|| arr[arr1[z]] == '11'|| arr[arr1[z]] == '11b')
+                { 
+                    
+                    var R = Math.floor((Math.random() * 6) + 1);
+                    console.log(R);
+                    switch (R) {
+                    case 1:
+                        var hint1 = '1.3.png';
+                        var hint2 = '2.2.png';
+                        var hint3 = '2.1.png';
+                            
+                        break;
+                    case 2:
+                        var hint1 = '1.3.png';
+                        var hint2 = '2.1.png';
+                        var hint3 = '2.2.png';
+                        
+                        break;
+                    case 3:
+                        var hint1 = '1.2.png';
+                        var hint2 = '2.3.png';
+                        var hint3 = '2.1.png';
+                            
+                        break;
+                    case 4:
+                        var hint1 = '1.2.png';
+                        var hint2 = '2.1.png';
+                        var hint3 = '2.3.png';
+                        
+                        break;
+                    case 5:
+                        var hint1 = '1.1.png';
+                        var hint2 = '2.3.png';
+                        var hint3 = '2.2.png';
+                        
+                        break;
+                    case 6:
+                        var hint1 = '1.1.png';
+                        var hint2 = '2.2.png';
+                        var hint3 = '2.3.png';
+                        
+                        break;
+                    default:
+                        
+                    }
+                    $('#hint1'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint1/'+hint1+'" />');
+                    $('#hint2'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint2/'+hint2+'" />');
+                    $('#hint3'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint3/'+hint3+'" />');
+                }
+                 if(arr[arr1[z]] == '5' || arr[arr1[z]] == '5b' || arr[arr1[z]] == '9'|| arr[arr1[z]] == '9b'|| arr[arr1[z]] == '14'|| arr[arr1[z]] == '14b'|| arr[arr1[z]] == '15'|| arr[arr1[z]] == '15b')
+                { 
+                    
+                    var R = Math.floor((Math.random() * 6) + 1);
+                    console.log(R);
+                    switch (R) {
+                    case 1:
+                        var hint1 = '1.4.png';
+                        var hint2 = '2.2.png';
+                        var hint3 = '2.1.png';
+                            
+                        break;
+                    case 2:
+                        var hint1 = '1.4.png';
+                        var hint2 = '2.1.png';
+                        var hint3 = '2.2.png';
+                        
+                        break;
+                    case 3:
+                        var hint1 = '1.2.png';
+                        var hint2 = '2.4.png';
+                        var hint3 = '2.1.png';
+                            
+                        break;
+                    case 4:
+                        var hint1 = '1.2.png';
+                        var hint2 = '2.1.png';
+                        var hint3 = '2.4.png';
+                        
+                        break;
+                    case 5:
+                        var hint1 = '1.1.png';
+                        var hint2 = '2.4.png';
+                        var hint3 = '2.2.png';
+                        
+                        break;
+                    case 6:
+                        var hint1 = '1.1.png';
+                        var hint2 = '2.2.png';
+                        var hint3 = '2.4.png';
+                        
+                        break;
+                    default:
+                        
+                    }
+                    $('#hint1'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint1/'+hint1+'" />');
+                    $('#hint2'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint2/'+hint2+'" />');
+                    $('#hint3'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint3/'+hint3+'" />');
+                }
+                if(arr[arr1[z]] == '6' || arr[arr1[z]] == '6b' || arr[arr1[z]] == '7'|| arr[arr1[z]] == '7b'|| arr[arr1[z]] == '8'|| arr[arr1[z]] == '8b')
+                { 
+                    
+                    var R = Math.floor((Math.random() * 6) + 1);
+                    console.log(R);
+                    switch (R) {
+                    case 1:
+                        var hint1 = '1.4.png';
+                        var hint2 = '2.2.png';
+                        var hint3 = '2.3.png';
+                            
+                        break;
+                    case 2:
+                        var hint1 = '1.4.png';
+                        var hint2 = '2.3.png';
+                        var hint3 = '2.2.png';
+                        
+                        break;
+                    case 3:
+                        var hint1 = '1.2.png';
+                        var hint2 = '2.4.png';
+                        var hint3 = '2.3.png';
+                            
+                        break;
+                    case 4:
+                        var hint1 = '1.2.png';
+                        var hint2 = '2.3.png';
+                        var hint3 = '2.4.png';
+                        
+                        break;
+                    case 5:
+                        var hint1 = '1.3.png';
+                        var hint2 = '2.4.png';
+                        var hint3 = '2.2.png';
+                        
+                        break;
+                    case 6:
+                        var hint1 = '1.3.png';
+                        var hint2 = '2.2.png';
+                        var hint3 = '2.4.png';
+                        
+                        break;
+                    default:
+                        
+                    }
+                    $('#hint1'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint1/'+hint1+'" />');
+                    $('#hint2'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint2/'+hint2+'" />');
+                    $('#hint3'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint3/'+hint3+'" />');
+                }
+                
+                
+                
+                z++;
+            }
+            return;
+        }
+        
+        $(document).ready(function () {
+
+            kaartenmaken();
+           
+            var i = 1;
+            while (i < 31) {
+                var tel;
+                if (i > 15) {
+                    tel = i - 15 + 'b'
+                } else {
+                    tel = i
+                }
+                i++;
+                kaarttonen(tel);
+            }
+            setTimeout(function () {
+                var t = 1;
+                while (t < 31) {
+                    var tel;
+                    if (t > 15) {
+                        tel = t - 15 + 'b'
+                    } else {
+                        tel = t
+                    }
+                    t++;
+                    kaartomdraaien(tel);
+                }
+            }, 1000);
+
+        });
+
+        function openOnImageClick(id) {
+            if (kaart2 == null ) {
+                if (kaartteller == 0 || kaartteller == 1) {
+                    switch (kaartteller) {
+                    case 0:
+                        kaart1 = id;
+                        kaartteller = 1;
+                        break;
+                    case 1:
+                        kaart2 = id;
+                        kaartteller = 2;
+                        break;
+                    default:
+                        kaartteller = 1;
+                        kaart1 = id;
+                    }
+                    kaarttonen(id);
+$("#vk" +id).removeClass("font");
+                    var delay = 2000;
+                    if (kaartteller == 2) {
+                        if ( kaart1 + 'b' == kaart2 || kaart1 == kaart2 + 'b') {
+                            setTimeout(function () {
+                                kaartverwijderen(kaart1);
+                                kaartverwijderen(kaart2);
+                                kaartteller = 0;
+                                kaart1 = null;
+                                kaart2 = null;
+                            }, 2000);
+                        } else {
+                            setTimeout(function () {
+                                kaartomdraaien(kaart1);
+                                kaartomdraaien(kaart2);
+                                kaartteller = 0;
+                                kaart1 = null;
+                                kaart2 = null;
+                            }, 3000);
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <title>Titel van de webpagina</title>
+    <style>
+        #f1_container {
+            position: relative;
+            margin: 10px auto;
+            width: auto;
+            height: auto;
+            z-index: 1;
+        }
+        
+        #f1_container {
+            perspective: 1000;
+        }
+        
+        .f1_card {
+            width: 132px;
+            height: 178px;
+            transform-style: preserve-3d;
+            transition: all 1.0s linear;
+        }
+        
+        .front {
+             -webkit-box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 5px;
+            -moz-box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 5px;
+            box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 5px;
+        
+        }
+        .front:hover {
+            -webkit-box-shadow: rgba(0, 0, 0, 0.8) 3px 2px 10px;
+            -moz-box-shadow: rgba(0, 0, 0, 0.8) 3px 2px 10px;
+            box-shadow: rgba(0, 0, 0, 0.8) 3px 2px 10px;
+             
+            
+        }
+        .front:hover +  .back{}
+        
+        .face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+                overflow: hidden;
+        }
+        
+        .face.back {
+            display: block;
+            transform: rotateY(180deg);
+            box-sizing: border-box;
+            padding: 10px;
+            color: white;
+            text-align: center;
+            background-color: #aaa;
+            
+        }
+    </style>
+</head>
+
+<body>
+    <div id="f1_container">
+
+
+    </div>
+
+</body>
+
+</html>
