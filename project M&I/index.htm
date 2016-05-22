@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="description" content="beschrijving van de webpagina">
     <meta name="keywords" content="trefwoorden, gescheiden, door, komma's">
-    <meta name="viewport" content="width=device-width, height=device-height" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <script src="jquery-1.12.1.min.js"></script>
     <script src="hintsplaatsen.js"></script>
     <script>
@@ -29,9 +29,10 @@
             indexTimerMin2,
             jokerson = true,
             gamestart = false,
-            helpopen = true;
-
-
+            helpopen = true,
+            arr = [],
+            randomnumber,
+            arr1 = [];
 
         function jokers() {
             if (jokerson === true) {
@@ -64,7 +65,6 @@
         }
 
         function Timer() {
-
             this.Interval = 1000;
             this.Enable = new Boolean(false);
             this.Tick;
@@ -129,66 +129,47 @@
                 nulmin = "";
             }
             timerplaatsen();
-
             if (indexMilliSec === 10) {
                 indexTimerSec = indexTimerSec + 1;
                 indexMilliSec = 0;
             }
-
             if (indexTimerSec === 60) {
                 indexTimerSec = 0;
                 indexTimerMin = indexTimerMin + 1;
-
             }
         }
 
         function kaarttonen(id) {
-
             $('.' + id).css({
                 'transform': 'rotateY(180deg)',
                 '-webkit-border-radius': '9px',
                 '-moz-border-radius': '9px',
-                'border-radius': '9px',
-                '-webkit-box-shadow': 'rgba(0, 0, 0, 0.8) -3px -2px 10px',
-                '-moz-box-shadow': 'rgba(0, 0, 0, 0.8) -3px -2px 10px',
-                'box-shadow': 'rgba(0, 0, 0, 0.8) -3px -2px 10px'
-
+                'border-radius': '9px'
             });
             $('#vk' + id).css({
-                'border': 'solid 0px black',
                 'background-color': 'white',
                 'margin-left': '-2px',
                 'margin-top': '0px',
                 'z-index': '-10'
             });
-
-
             return;
         }
 
         function kaartomdraaien(id) {
-
             $('.' + id).css({
                 'transform': 'rotateY(0deg)',
-                '-webkit-box-shadow': '',
-                '-moz-box-shadow': '',
-                'box-shadow': '',
                 '-webkit-animation-delay': ' 5s',
                 'animation-delay': ' 5s'
             });
-
             $('#vk' + id).css({
-                'border': ' solid 1px black',
                 'background-color': 'white',
                 'margin-left': '-1px',
                 'margin-top': '-1px'
             });
-
             return;
         }
 
         function reset() {
-
             kaartteller = 0;
             kaartomdraaien(kaart1);
             kaartomdraaien(kaart2);
@@ -216,7 +197,6 @@
         }
 
         function notif(status) {
-
             $('<div/>', {
                 'id': 'notif',
                 'class': 'font'
@@ -231,30 +211,25 @@
 
         function sound(nr) {
             if (soundon === true) {
-
                 if (nr === 1) {
-                    var audioElement = document.createElement('audio');
-                    audioElement.setAttribute('src', 'sound/01-minion-sounds.mp3');
-                    audioElement.addEventListener("load", function () {
-                        audioElement.play();
+                    var audioElement1 = document.createElement('audio');
+                    audioElement1.setAttribute('src', 'sound/01-minion-sounds.mp3');
+                    audioElement1.addEventListener("load", function () {
+                        audioElement1.play();
                     }, true);
-
-                    audioElement.play();
+                    audioElement1.play();
                 } else if (nr === 2) {
-                    var audioElement = document.createElement('audio');
-                    audioElement.setAttribute('src', 'sound/11-minion-sounds.mp3');
-                    audioElement.addEventListener("load", function () {
-                        audioElement.play();
+                    var audioElement2 = document.createElement('audio');
+                    audioElement2.setAttribute('src', 'sound/11-minion-sounds.mp3');
+                    audioElement2.addEventListener("load", function () {
+                        audioElement2.play();
                     }, true);
-
-                    audioElement.play();
+                    audioElement2.play();
                 }
             }
         }
 
         function kaartenmaken() {
-            var arr = [],
-                randomnumber;
             while (arr.length < 30) {
                 if (arr.length < 15) {
                     randomnumber = Math.floor((Math.random() * 15) + 1);
@@ -272,10 +247,9 @@
                 if (!found) arr[arr.length] = randomnumber;
             }
 
-            var arr1 = []
             while (arr1.length < 30) {
-                var randomnumber = Math.ceil((Math.random() * 30) - 1)
-                var found = false;
+                var randomnumber = Math.ceil((Math.random() * 30) - 1),
+                    found = false;
                 for (var i = 0; i < arr1.length; i++) {
                     if (arr1[i] === randomnumber) {
                         found = true;
@@ -285,9 +259,7 @@
                 if (!found) arr1[arr1.length] = randomnumber;
             }
             var z = 0;
-
             while (z < 30) {
-
                 var test = arr[arr1[z]].toString();
                 if (test.slice(-1) === 'b') {
                     if (test === '13b') {
@@ -300,9 +272,14 @@
                 }
                 if (jokerson === false && (arr[arr1[z]] == '13' || arr[arr1[z]] == '13b')) {} else {
                     $('<div/>', {
+                        'id': 'c' + arr[arr1[z]],
+                        'class': 'cardcontainer',
+                    }).appendTo('#f1_container');
+                    $('<div/>', {
                         'id': arr[arr1[z]],
                         'class': 'shadow f1_card ' + arr[arr1[z]],
-                    }).appendTo('#f1_container');
+                    }).appendTo('#c' + arr[arr1[z]]);
+
                     $('<div/>', {
                         'id': 'vk' + arr[arr1[z]],
                         'class': 'front face',
@@ -311,8 +288,6 @@
                         'id': 'ak' + arr[arr1[z]],
                         'class': 'back face center',
                     }).appendTo('#' + arr[arr1[z]]);
-
-
                     $('<div/>', {
                         'id': 'hint1' + arr[arr1[z]],
                         'class': 'hint1',
@@ -328,11 +303,8 @@
                         'class': 'hint3',
                         'onclick': 'openOnImageClick(this.id)',
                     }).appendTo('#vk' + arr[arr1[z]]);
-
-
                     $('#ak' + arr[arr1[z]]).prepend('<img class="nodragimg frontimg" src="images/minions' + trimmed + '.png" />');
                     $('#vk' + arr[arr1[z]]).prepend('<img class="nodragimg backimg" id="' + arr[arr1[z]] + '" src="images/kaartachterkant.png" onclick="openOnImageClick(this.id)"/>');
-
                     hintsplaatsen(arr[arr1[z]]);
                 }
                 z++;
@@ -340,41 +312,62 @@
             return;
         }
 
-        function kaartogenbliktonen() {
-
-            var i = 1;
-            while (i < 31) {
-                var tel;
-                if (i > 15) {
-                    tel = i - 15 + 'b'
-                } else {
-                    tel = i
-                }
-                i++;
-                kaarttonen(tel);
-            }
-
-            setTimeout(function () {
-                var t = 1;
-                while (t < 31) {
+        function kaartogenbliktonen(id) {
+            if (id === 1) {
+                var i = 1;
+                while (i < 31) {
                     var tel;
-                    if (t > 15) {
-                        tel = t - 15 + 'b'
+                    if (i > 15) {
+                        tel = i - 15 + 'b'
                     } else {
-                        tel = t
+                        tel = i
                     }
-                    t++;
-                    kaartomdraaien(tel);
+                    i++;
+                    kaarttonen(tel);
                 }
-            }, 3000);
+                setTimeout(function () {
+                    var t = 1;
+                    while (t < 31) {
+                        var tel;
+                        if (t > 15) {
+                            tel = t - 15 + 'b'
+                        } else {
+                            tel = t
+                        }
+                        t++;
+                        kaartomdraaien(tel);
+                    }
+                }, 3000);
+            } else {
+                var maxLoops = 30,
+                    i = -1;
+                (function next() {
+                    if (i++ >= maxLoops) return;
+                    setTimeout(function () {
+                        kaarttonen(arr[arr1[i]]);
+                        next();
+                    }, 150);
+                })();
+                setTimeout(function () {
+                    var maxLoops = 30,
+                        i = -1;
+                    (function next() {
+                        if (i++ >= maxLoops) return;
+                        setTimeout(function () {
+                            kaartomdraaien(arr[arr1[i]]);
+                            next();
+                        }, 150);
+                    })();
+
+
+                }, 6000);
+            }
         }
 
         $(document).ready(function () {
 
             onHover();
             offHover();
-
-
         });
         var divvisible;
 
@@ -435,8 +428,6 @@
             kaartenmaken();
             kaartogenbliktonen();
             obj.Stop();
-
-
         }
 
         function openOnImageClick(id) {
@@ -454,7 +445,7 @@
                 kaarttonen(id);
                 setTimeout(function () {
                     sound(2);
-                    kaartogenbliktonen();
+                    kaartogenbliktonen(1);
                 }, 800);
                 setTimeout(function () {
 
@@ -523,8 +514,42 @@
                 }
             }
         }
+                        function closehelp() {
+                    if (gamestart === false) {
+                        kaartenmaken();
+                        kaartogenbliktonen();
+                        gamestart = true;
+                    }
+                    if (helpopen === true) {
+                        $('#rulesdiv').css({
+                            'margin-top': '-100%',
+                            'visibility': 'hidden',
+                            'height': '400px'
+                        });
+                        $('#uitlegdiv').css({
+                            'visibility': 'hidden',
+                        });
+                        $('.uitlegfont').css({
+                            'visibility': 'hidden',
+                        });
+                        helpopen = false
+                    } else {
+                        $('#rulesdiv').css({
+                            'margin-top': '120px',
+                            'visibility': 'visible',
+                            'height': 'auto'
+                        });
+                        $('#uitlegdiv').css({
+                            'visibility': 'visible',
+                        });
+                        $('.uitlegfont').css({
+                            'visibility': 'visible',
+                        });
+                     helpopen = true
+                    }
+                }
     </script>
-    <title>Titel van de webpagina</title>
+    <title>Memory game</title>
     <style>
         body {
             -webkit-touch-callout: none;
@@ -544,20 +569,26 @@
             margin: 0;
             background-image: url('images/Background.jpg');
             background-color: rgba(255, 255, 255, 0.1);
+            width: 100%;
         }
         
         #f1_container {
             position: relative;
-            margin: 10px auto;
+            margin-top: 10px;
             width: 50%;
             height: 900px;
             z-index: 1;
+            width: 48%;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
         }
         
         #f1_container {
             perspective: 1000;
             -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
             -webkit-perspective: 1000;
+            padding-left: 15px;
         }
         
         .f1_card {
@@ -617,6 +648,19 @@
             -webkit-transform: rotateY(180deg);
         }
         
+        .cardcontainer {
+            height: auto;
+            width: auto;
+            perspective: 10000;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            -webkit-perspective: 10000;
+            float: left;
+            float: none;
+            display: inline-block;
+            zoom: 1;
+            vertical-align: top;
+        }
+        
         .nodragimg {
             user-drag: none;
             user-select: none;
@@ -671,6 +715,27 @@
             margin-top: 40%;
         }
         
+        .hint1info {
+            height: 14%;
+            width: 20%;
+            margin-left: 23%;
+            margin-top: -74.8%;
+        }
+        
+        .hint2info {
+            height: 14%;
+            width: 20%;
+            margin-left: 29%;
+            margin-top: -82%;
+        }
+        
+        .hint3info {
+            height: 14%;
+            width: 20%;
+            margin-left: 76%;
+            margin-top: 40%;
+        }
+        
         #notif {
             position: absolute;
             width: 40%;
@@ -716,7 +781,7 @@
             text-align: center;
             width: auto;
             border-bottom: solid 1px rgba(0, 0, 0, 0.7);
-            height: 140px;
+            height: 108px;
             width: 100%;
             background-color: rgba(255, 255, 255, 0.95);
         }
@@ -735,16 +800,17 @@
         
         #timer {
             position: absolute;
-            width: 289px;
+            width: 290px;
             max-height: 40px;
-            left: 45%;
+            left: 44.5%;
+            margin-top: -20px;
         }
         
         #Menuimg1 {
             position: absolute;
             z-index: 11;
-            top: 20px;
-            left: 20px;
+            top: 10px;
+            left: 15px;
         }
         
         #Menudiv {
@@ -754,7 +820,7 @@
             z-index: 10;
             background-color: white;
             left: -150px;
-            top: 140px;
+            top: 108px;
             background-color: rgba(255, 255, 255, 0.9);
         }
         
@@ -812,7 +878,7 @@
         
         #uitlegdiv {
             width: 100%;
-            height: 983px;
+            height: 100%;
             z-index: 20;
             position: fixed;
             background-color: rgba(0, 0, 0, 0.7);
@@ -822,12 +888,16 @@
         
         #rulesdiv {
             width: 50%;
-            height: 750px;
+            height: 800px;
             background-color: rgba(255, 255, 255, 0.92);
             margin-left: auto;
             margin-right: auto;
             margin-top: 120px;
             border-radius: 5px;
+            -webkit-transition-duration: 0.3s;
+            -moz-transition-duration: 0.3s;
+            transition-duration: 0.3s;
+            -o-transition-duration: 0.3s;
         }
         
         .rulesfonthelp {
@@ -852,226 +922,436 @@
             cursor: hand;
             display: block;
         }
-        .uitlegfont{
-        font-size:21px;
-            text-shadow:none; 
-            letter-spacing:normal;
         
+        .uitlegfont {
+            font-size: 21px;
+            text-shadow: none;
+            letter-spacing: normal;
         }
-        .uitlegtekstachtergrond{
         
-        background-color: rgba(0,0,0,0.3);
+        .uitlegtekstachtergrond {
+            background-color: rgba(0, 0, 0, 0.3);
             border-radius: 15px;
             padding-right: 15px;
+            width: 100%;
+            text-align: center;
         }
-        #browsers{
         
-       margin-top: 495px;
-        height: 90px;
-            width:90%;
-            margin-left:auto;
-            margin-right:auto;
+        #browsers {
+            margin-top: 530px;
+            height: 90px;
+            width: 90%;
+            margin-left: auto;
+            margin-right: auto;
             padding: auto;
+        }
         
+        .positioning1 {
+            float: left;
+            margin-right: 50px;
+            width: 39%;
+            margin-left: 5%;
         }
-        .positioning1{
-            float:right; 
-            margin-right:50px;
+        
+        .positioning2 {
+            width: 100%;
         }
-        .positioning2{
-                width:     90%;
-   
+        
+        #helpicon {
+            float: right;
+            margin-right: 40px;
+            margin-top: 40px;
         }
-        @media only screen and (max-device-width: 750px) and (min-device-width : 666px)  {
-            
+        
+        .infocardslinks,
+        .infocardsrechts {
+            float: none;
+            display: inline-block;
+            *display: inline;
+            zoom: 1;
+            vertical-align: top;
+        }
+        
+        .browserimg {
+            float: none;
+            display: inline-block;
+            zoom: 1;
+            vertical-align: top;
+            margin-left: 15%;
+            margin-left: 7%;
+            margin-right: 7%;
+        }
+        
+        .infocards {
+            border: 1px solid black;
+            margin-left: -1px;
+            margin-top: -1px;
+            z-index: -10;
+            background-color: white;
+        }
+        
+        @media only screen and (max-device-width: 750px) and (min-device-width: 200px) and (orientation:portrait) {
+            body {
+                overflow: auto;
+            }
+            html {
+                height: auto;
+            }
+            .f1_card {
+                width: 55px;
+                float: none;
+                display: inline-block;
+                *display: inline;
+                zoom: 1;
+                vertical-align: top;
+                height: 78px;
+                margin-left: 11px;
+            }
+            .browserimg {
+                height: 50%;
+            }
+            .uitlegtekstachtergrond {
+                padding-right: 0;
+            }
+            #sound {
+                margin-top: 50px;
+            }
+            .hint1 {
+                margin-left: 28%;
+                margin-top: -84.9%;
+            }
+            .hint2 {
+                margin-left: 33.8%;
+                margin-top: -86%;
+            }
+            .hint3 {
+                margin-left: 81%;
+                margin-top: 42%;
+            }
+            .hint1info {
+                margin-left: 24%;
+                margin-top: -75.9%;
+            }
+            .hint2info {
+                margin-left: 30.2%;
+                margin-top: -81.9%;
+            }
+            .hint3info {
+                margin-left: 78%;
+                margin-top: 40%;
+            }
+            #Menudiv {
+                height: calc(100% + 100px);
+                top: 100px;
+            }
+            .infocardslinks {
+                width: 91px;
+                height: 120px;
+            }
+            .infocardsrechts {
+                width: 91px;
+                height: 120px;
+            }
+            #f1_container {
+                margin-left: -11px;
+                width: calc(100% - 15px);
+                height: calc(100% - 120px);
+                text-align: center;
+            }
+            #timer {
+                left: 30%;
+                width: 150px;
+                margin-top: -5px;
+            }
+            .font {
+                font-size: 30px;
+            }
+            #bovenbalk {
+                height: 100px;
+            }
+            #Menuimg1 {
+                width: 15%;
+                margin: 10px;
+            }
+            #helpicon {
+                width: 9%;
+                margin: 30px
+            }
+        }
+        
+        @media only screen and (min-device-width: 200px) and (max-device-width: 1400px) {
+            .uitlegfont {
+                width: 100%;
+            }
             #rulesdiv {
                 width: 90%;
-                    height: auto;
-                
+                height: auto;
+                margin-top: 20px;
+            }
+            #closehelpid {
+                height: 30px;
             }
             #uitlegdiv {
                 height: auto;
                 position: absolute;
                 height: auto;
             }
-            .uitlegtekstachtergrond {    height: 100%;}
+            .uitlegtekstachtergrond {
+                height: 100%;
+            }
             #browsers {
-                    margin-top: 0px;
+                margin-top: 0px;
+                padding-top: 30px;
             }
-            .positioning1{
-                    float: none;
-                    width: 82%;
-    height: 45%;
-    margin-left: 50px;
-                margin-top:50px; 
+            .positioning1 {
+                float: none;
+                width: 90%;
+                height: 46%;
+                margin-right: 0px;
+                margin-top: 10px;
+                margin-left: 0%;
+                display: inline-block;
+                *display: inline;
+                zoom: 1;
+                vertical-align: top;
             }
-            .positioning2{
-                    width: 100%;
-    height: 1335px;
+            .positioning2 {
+                width: 100%;
+                height: 1100px;
+                text-align: center;
             }
-       
-            .f1_card {
-    width: 96px;
-                height: 126px;}
-                 .infocardslinks{
-                margin-left: 20%;
-                    width: 132px;
-    height: 178px;
-                
-            }
-            .infocardsrechts{
-                    width: 132px;
-    height: 178px;
-                
-                
-            }
-            #f1_container {
-        height: 846px;
-                width: 94%;}
-            #timer{
-                left: 33%;
-            }
-            
         }
         
+        @media only screen and (max-device-width: 750px) and (min-device-width: 560px) and (orientation:portrait) {
+            .f1_card {
+                width: 103px;
+                height: 142px;
+                margin-left: 11px;
+            }
+            #helpicon {
+                width: 8%;
+                margin: 0px;
+                margin-right: 30px;
+                margin-top: 34px;
+            }
+            #timer {
+                left: 40%;
+                width: 150px;
+                margin-top: 5px;
+            }
+            #Menuimg1 {
+                position: absolute;
+                z-index: 11;
+                margin: 0px;
+            }
+        }
+        
+        @media only screen and (min-device-width: 668px) and (max-device-width: 800px) and (orientation: portrait) {
+            body {
+                overflow: auto;
+            }
+            #rulesdiv {
+                width: 90%;
+                height: auto;
+            }
+            #uitlegdiv {
+                height: auto;
+                position: absolute;
+                height: auto;
+            }
+            .uitlegtekstachtergrond {
+                height: 100%;
+            }
+            #browsers {
+                margin-top: 0px;
+            }
+            .positioning1 {
+                float: none;
+                width: 82%;
+                height: 45%;
+                margin-left: 20px;
+                margin-top: 20px;
+            }
+            .positioning2 {
+                width: 100%;
+                height: 1335px;
+            }
+            .f1_card {
+                width: 120px;
+                height: 166px;
+                margin-left: 11px;
+            }
+            .infocardslinks {
+                width: 132px;
+                height: 178px;
+            }
+            .infocardsrechts {
+                width: 132px;
+                height: 178px;
+            }
+            #f1_container {
+                height: 846px;
+                width: calc(100% - 15px);
+            }
+            #timer {
+                left: 38%;
+            }
+        }
+        
+        @media only screen and (min-device-width: 370px) and (max-device-width: 560px) and (orientation: portrait) {
+            #timer {
+                left: 40%;
+                width: 150px;
+                margin-top: 5px;
+            }
+        }
+        
+        @media only screen and (max-device-width: 559px) and (min-device-width: 400px) and (orientation:portrait) {
+            .f1_card {
+                width: 70px;
+                height: 100px;
+            }
+        }
+        
+        @media only screen and (min-device-width: 768px) and (max-device-width: 1025px) and (orientation: portrait) {
+            .f1_card {
+                width: 114px;
+                height: 153px;
+            }
+            #f1_container {
+                width: calc(100% - 15px);
+            }
+            body {
+                overflow: auto;
+            }
+            #timer {
+                left: 37%;
+            }
+            #rulesdiv {
+                width: 77%;
+            }
+        }
+        
+        @media only screen and (min-device-width: 600px) and (max-device-width: 750px) and (orientation: portrait) {
+            #timer {
+                left: 40%;
+                width: 180px;
+                margin-top: 5px;
+            }
+            .font {
+                font-size: 38px;
+            }
+        }
+        
+        @media only screen and (min-device-width: 1025px) and (max-device-width: 1400px) {
+            #f1_container {
+                width: 75%;
+            }
+            #rulesdiv {
+                width: 50%;
+                height: auto;
+                margin-top: 20px;
+            }
+            .browserimg {
+                margin-left: 5%;
+                margin-right: 5%;
+            }
+        }
     </style>
 </head>
 
 
-<body>
+<body onmouseover="offHover()">
     <div id='uitlegdiv'>
         <div id='rulesdiv'>
             <br>
-            <img src="images/close.png" id="closehelpid" onclick="closehelp()">
-            <script>
-                function closehelp() {
-
-                    if (gamestart === false) {
-
-                        kaartenmaken();
-                        kaartogenbliktonen();
-                        gamestart = true;
-                    }
-                    if (helpopen === true) {
-
-
-                        $('#rulesdiv').css({
-                            'margin-top': '-100%',
-                            'transition': 'margin-top 1s 0s',
-                        });
-                        $('#uitlegdiv').css({
-                            'visibility': 'hidden',
-                            'transition': 'visibility 0s 0.5s',
-                        });
-                        helpopen = false
-
-                    } else {
-
-                        $('#rulesdiv').css({
-                            'margin-top': '120px',
-                            'transition': 'margin-top 1s 0s',
-                        });
-                        $('#uitlegdiv').css({
-                            'visibility': 'visible',
-                            'transition': 'visibility 0s 0.5s',
-                        });
-
-
-
-                        helpopen = true
-                    }
-
-                }
-            </script>
+            <img src="images/close.png" id="closehelpid" onclick="closehelp()" alt="close icon">
             <span class="font rulesfonthelp">Info</span>
             <br>
             <br>
-
-            <div class="positioning2"style=''>
-
-
-                <div class="positioning1" style="">
-                      <div class="uitlegtekstachtergrond">
-                    <span class="font rulesfont" style="">Hints</span>
-                    <br>
-
-
-                    <div class="shadow f1_card infocardslinks" style="">
-                        <div class="front face" style="border: 1px solid black; margin-left: -1px; margin-top: -1px; z-index: -10; background-color: white; ">
-                            <img class="nodragimg backimg" src="images/minions1.png" style='width:95%; height:97%;'>
-                        </div>
-
-                    </div>
-
-
-
-                    <div class="shadow f1_card infocardsrechts" style="">
-                      
-                        <div class="front face" style="">
-                            <img class="nodragimg backimg" src="images/kaartachterkant.png">
-                            <div class="hint1">
-                                <img class="nodragimg hint" src="images/hint1/1.4.png">
-                            </div>
-                            <div class="hint2">
-                                <img class="nodragimg hint" src="images/hint2/2.3.png">
-                            </div>
-                            <div class="hint3">
-                                <img class="nodragimg hint" src="images/hint3/2.1.png">
-                            </div>
-                        </div>
-                       
-
-                    </div>
-                     <br>
-                        <p class="font uitlegfont">testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br></p></div>
-                </div>
-
-
-
+            <div class="positioning2">
                 <div class="positioning1">
-<div class="uitlegtekstachtergrond">
-                    <span class="font rulesfont ">Jokers</span>
-                    <br>
-
-
-                    <div class="shadow f1_card infocardslinks" style="">
-                        <div class="front face" style="border: 1px solid black; margin-left: -1px; margin-top: -1px; z-index: -10; background-color: white; ">
-                            <img class="nodragimg backimg" src="images/minions13.png">
+                    <div class="uitlegtekstachtergrond">
+                        <span class="font rulesfont">Hints</span>
+                        <br>
+                        <div class="shadow f1_card infocardslinks">
+                            <div class="front face infocrads">
+                                <img class="nodragimg backimg" src="images/minions1.png" style='width:95%; height:97%;' alt="voorkant infokaart">
+                            </div>
                         </div>
+                        <div class="shadow f1_card infocardsrechts">
 
-                    </div>
-                    <div class="shadow f1_card infocardsrechts">
-                        <div class="front face" style="border: 1px solid black; margin-left: -1px; margin-top: -1px; z-index: -10; background-color: white;">
-                            <img class="nodragimg backimg" src="images/minions13b.png" style='width:95%; height:97%;'>
+                            <div class="front face">
+                                <img class="nodragimg backimg" src="images/kaartachterkant.png" alt="achterkant infokaart">
+                                <div class="hint1info">
+                                    <img class="nodragimg hint" src="images/hint1/1.4.png" alt="hint1 voorbeeld">
+                                </div>
+                                <div class="hint2info">
+                                    <img class="nodragimg hint" src="images/hint2/2.3.png" alt="hint2 voorbeeld">
+                                </div>
+                                <div class="hint3info">
+                                    <img class="nodragimg hint" src="images/hint3/2.1.png" alt="hint3 voorbeeld">
+                                </div>
+                            </div>
                         </div>
-
+                        <br>
+                        <p class="font uitlegfont">
+                            De symbolen op
+                            <br>de voorkant van de
+                            <br>kaart vind je
+                            <br>nooit terug tussen de
+                            <br>drie hints op de
+                            <br>achterkant
+                            <br>
+                        </p>
                     </div>
-<br>
-                       <p class="font uitlegfont">testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br>testtesttesttesttesttesttesttestte<br></p></div>
                 </div>
-                 
-
+                <div class="positioning1">
+                    <div class="uitlegtekstachtergrond">
+                        <span class="font rulesfont ">Jokers</span>
+                        <br>
+                        <div class="shadow f1_card infocardslinks">
+                            <div class="front face infocrads">
+                                <img class="nodragimg backimg" src="images/minions13.png" alt="slechte joker voorbeeld">
+                            </div>
+                        </div>
+                        <div class="shadow f1_card infocardsrechts">
+                            <div class="front face infocrads">
+                                <img class="nodragimg backimg" src="images/minions13b.png" style='width:95%; height:97%;' alt="goeie joker voorbeeld">
+                            </div>
+                        </div>
+                        <br>
+                        <p class="font uitlegfont">Twee jokers in het spel
+                            <br>de slechte joker is
+                            <br>game over!
+                            <br>de goeie joke
+                            <br>toont alle kaarten
+                            <br>gedurende 3 seconden
+                            <br>
+                        </p>
+                    </div>
+                </div>
             </div>
-        <div id="browsers" class="uitlegtekstachtergrond"> 
-            <img src="images/chrome.png" height="80" style="margin-left:calc(17% - 80px);"> 
-            <img src="images/opera.png" height="80" style="margin-left:calc(25% - 80px);"> 
-            <img src="images/Firefox.png" height="80" style="margin-left:calc(25% - 80px);"> 
-            <img src="images/Internet-Explorer.png" height="80" style="margin-left:calc(25% - 80px);">
+            <div id="browsers" class="uitlegtekstachtergrond">
+                <img src="images/chrome.png" height="80" class="browserimg" alt="chrome icon">
+                <img src="images/opera.png" height="80" class="browserimg" alt="opera icon">
+                <img src="images/Firefox.png" height="80" class="browserimg" alt=" firefox icon">
+                <img src="images/Internet-Explorer.png" height="80" class="browserimg" alt=" IE icon">
             </div>
             <br>
         </div>
-         <br>
-    </div>
-    <img id="Menuimg1" class="Menuimg" src="images/menu.png" onmouseout="offHover()" onmouseover="onHover()" style="transform: rotate(0deg); transition: transform 1s 0s, opacity 0s linear;">
-    <img src="images/doc_lines_icon&48.png" style="float:right;margin:50px;" onclick="closehelp()">
-    <div id='Menudiv' class="Menuimg" onmouseout="offHover()" onmouseover="onHover()" style="left: -150px; transition: left 1s 0s, opacity 0s linear;">
-        <img id='sound' onclick="soundcontrol()" src="images/soundon.png">
         <br>
-        <img id='hintsaan' onclick="hints();" src="images/hintson.png">
-        <img id='jokersaan' onclick="jokers();" src="images/joker.jpg">
+    </div>
+    <img id="Menuimg1" class="Menuimg" src="images/menu.png" onmouseout="offHover()" onmouseover="onHover()" style="transform: rotate(0deg); transition: transform 1s 0s, opacity 0s linear;" alt="menu icon">
+    <img src="images/doc_lines_icon&48.png" onclick="closehelp()" id="helpicon" alt="help icon">
+    <div id='Menudiv' class="Menuimg" onmouseout="offHover()" onmouseover="onHover()" style="left: -150px; transition: left 1s 0s, opacity 0s linear;">
+        <img id='sound' onclick="soundcontrol()" src="images/soundon.png" alt="sound switch icon">
+        <br>
+        <img id='hintsaan' onclick="hints();" src="images/hintson.png" alt="hints switch icon">
+        <img id='jokersaan' onclick="jokers();" src="images/joker.jpg" alt="jokers switch icon">
         <input class="buttons" type="button" value="Reload game" onclick="Reloadgame()" />
     </div>
-    <div id='bovenbalk'>
+    <div id='bovenbalk' onmouseover="offHover()">
         <div id='timer'>
             <p id="tijdmillisec" class="font">00:</p>
             <p id="tijdsec" class="font">00:</p>
@@ -1079,12 +1359,8 @@
 
         </div>
     </div>
-
-    <div id="f1_container">
-
-
+    <div id="f1_container" onmouseover="offHover()">
     </div>
-
 </body>
 
 </html>
