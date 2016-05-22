@@ -7,10 +7,107 @@
     <meta name="keywords" content="trefwoorden, gescheiden, door, komma's">
     <meta name="viewport" content="width=device-width, height=device-height" />
     <script src="jquery-1.12.1.min.js"></script>
+    <script src="hintsplaatsen.js"></script>
     <script>
         var kaartteller = 0;
         var kaart1;
         var kaart2;
+        var timerhandeler
+        var aantalkaartenjuist = 0;
+        var aantalkaartenomgedraait = 0;
+        var indexMilliSec = 0;
+        var indexTimerSec = 0;
+        var indexTimerMin = null;
+        var obj = new Timer();
+        var soundon = true;
+        var hintson = true;
+        
+        
+        function hints(){
+        if(hintson == true){
+            $("#hintsaan").attr("src","images/hintsoff.png");
+            hintson = false;}
+             else{
+            $("#hintsaan").attr("src","images/hintson.png");
+             hintson = true;
+             }
+        
+        }
+         function soundcontrol(){
+         if(soundon == true){
+            $("#sound").attr("src","images/soundoff.png");
+            soundon = false;}
+             else{
+            $("#sound").attr("src","images/soundon.png");
+             soundon = true;
+             }
+        }
+        function Timer() {
+
+            this.Interval = 1000;
+            this.Enable = new Boolean(false);
+            this.Tick;
+            var timerId = 0;
+            var thisObject;
+            this.Start = function () {
+                this.Enable = new Boolean(true);
+                thisObject = this;
+                if (thisObject.Enable) {
+                    thisObject.timerId = setInterval(
+                        function () {
+                            thisObject.Tick();
+                        }, thisObject.Interval);
+                }
+            }
+            this.Stop = function () {
+                thisObject.Enable = new Boolean(false);
+                clearInterval(thisObject.timerId);
+            }
+
+        }
+
+
+        function timer_tick() {
+
+            indexMilliSec = indexMilliSec + 1;
+            document.getElementById("tijdmin").remove();
+            document.getElementById("tijdsec").remove();
+            document.getElementById("tijdmillisec").remove();
+            var nulMillisec;
+            var nulSec;
+            var nulmin;
+            if (indexMilliSec < 10) {
+                nulMillisec = 0;
+            } else {
+                nulMillisec = "";
+            }
+            if (indexTimerSec < 10) {
+                nulSec = 0;
+            } else {
+                nulSec = "";
+            }
+            if (indexTimerMin < 10) {
+                nulmin = 0;
+            } else {
+                nulmin = "";
+            }
+            $('#timer').prepend('<p id="tijdmillisec" class="font">' + nulMillisec + indexMilliSec + '</p>');
+
+            $('#timer').prepend('<p id="tijdsec" class="font">' + nulSec + indexTimerSec + ':' + '</p>');
+            $('#timer').prepend('<p id="tijdmin" class="font">' + nulmin + indexTimerMin + ':' + '</p>');
+
+
+            if (indexMilliSec == 10) {
+                indexTimerSec = indexTimerSec + 1;
+                indexMilliSec = 0;
+            }
+
+            if (indexTimerSec == 60) {
+                indexTimerSec = 0;
+                indexTimerMin = indexTimerMin + 1;
+
+            }
+        }
 
         function kaarttonen(id) {
             $('.' + id).css({
@@ -21,15 +118,15 @@
                 '-webkit-box-shadow': 'rgba(0, 0, 0, 0.8) -3px -2px 10px',
                 '-moz-box-shadow': 'rgba(0, 0, 0, 0.8) -3px -2px 10px',
                 'box-shadow': 'rgba(0, 0, 0, 0.8) -3px -2px 10px',
-             
-               
+
             });
-            $('#vk' + id).css({ 
+            $('#vk' + id).css({
                 'border': 'solid 0px black',
-                'background-color':'white',
-                'margin-left':'-2px',
-                'margin-top':'0px'
+                'background-color': 'white',
+                'margin-left': '-2px',
+                'margin-top': '0px'
             });
+
             return;
         }
 
@@ -42,13 +139,25 @@
                 '-webkit-animation-delay': ' 5s',
                 'animation-delay': ' 5s',
             });
-                 $('#vk' + id).css({
+            $('#vk' + id).css({
                 'border': ' solid 1px black',
-                'background-color':'white',
-                'margin-left':'-1px',
-                'margin-top':'-1px'
+                'background-color': 'white',
+                'margin-left': '-1px',
+                'margin-top': '-1px'
             });
+
             return;
+        }
+
+        function reset() {
+
+            kaartteller = 0;
+            kaartomdraaien(kaart1);
+            kaartomdraaien(kaart2);
+            kaart1 = null;
+            kaart2 = null;
+            clearTimeout(timerhandeler);
+
         }
 
         function kaartverwijderen(id) {
@@ -57,7 +166,59 @@
                 'opacity': '0',
                 'transition': 'visibility 0s 2s, opacity 2s linear',
             });
+
             return;
+        }
+
+        function kaartenweg() {
+            $('#f1_container').css({
+                'visibility': 'hidden',
+                'opacity': '0',
+                'transition': 'visibility 0s 2s, opacity 2s linear',
+            });
+
+            return;
+        }
+       
+
+        function notif(status) {
+
+            $('<div/>', {
+                'id': 'notif',
+                'class': 'font',
+            }).appendTo('body');
+            if (status == "You Won!") {
+                $('#notif').prepend('<p>Time: ' + indexTimerMin + ' Min ' + indexTimerSec + ' sec' + '</p>');
+                $('#notif').prepend('<p>Cards turned: ' + aantalkaartenomgedraait + '</p>');
+            }
+            $('#notif').prepend('<p>' + status + '</p>');
+        }
+
+        function sound(nr) {
+            if(soundon == true){
+            if (nr == 1) {
+                var audioElement = document.createElement('audio');
+                audioElement.setAttribute('src', 'sound/01-minion-sounds.mp3');
+                audioElement.addEventListener("load", function () {
+                    audioElement.play();
+                }, true);
+
+                audioElement.play();
+            } else if (nr == 2) {
+                var audioElement = document.createElement('audio');
+                audioElement.setAttribute('src', 'sound/11-minion-sounds.mp3');
+                audioElement.addEventListener("load", function () {
+                    audioElement.play();
+                }, true);
+
+                audioElement.play();
+
+            }
+            }
+            
+            
+
+
         }
 
         function kaartenmaken() {
@@ -79,6 +240,8 @@
                 if (!found) arr[arr.length] = randomnumber;
             }
 
+
+
             var arr1 = []
             while (arr1.length < 30) {
                 var randomnumber = Math.ceil((Math.random() * 30) - 1)
@@ -97,267 +260,72 @@
 
                 var test = arr[arr1[z]].toString();
                 if (test.slice(-1) == 'b') {
-                    var trimmed = test.slice(0, -1);
+                    if (test == '13b') {
+                        var trimmed = test;
+                    } else {
+                        var trimmed = test.slice(0, -1);
+                    }
                 } else {
                     var trimmed = test;
                 }
-                
+
                 $('<div/>', {
                     'id': arr[arr1[z]],
                     'class': 'shadow f1_card ' + arr[arr1[z]],
-                    'style': ' margin-bottom:15px; margin-left:15px; float:left; ',
                 }).appendTo('#f1_container');
                 $('<div/>', {
                     'id': 'vk' + arr[arr1[z]],
                     'class': 'front face',
-                    'style': ' border:solid 1px black; border-radius:9px; background-color:white;',
                 }).appendTo('#' + arr[arr1[z]]);
                 $('<div/>', {
                     'id': 'ak' + arr[arr1[z]],
                     'class': 'back face center',
-                    'style': ' border:solid 1px black; border-radius:9px; background-color:white;',
                 }).appendTo('#' + arr[arr1[z]]);
-               
-                
+
+
                 $('<div/>', {
-                    'id':'hint1'+arr[arr1[z]],
+                    'id': 'hint1' + arr[arr1[z]],
                     'class': 'hint1',
-                    'style': ' position: relative;height: 14%;width: 20%;background-color: transparent;margin-left: 23%;margin-top: -75%;border: solid 1px transparent;',
+                    'onclick': 'openOnImageClick(this.id)',
                 }).appendTo('#vk' + arr[arr1[z]]);
                 $('<div/>', {
-                    'id':'hint2'+arr[arr1[z]],
+                    'id': 'hint2' + arr[arr1[z]],
                     'class': 'hint2',
-                    'style': ' position: relative;height: 14%;width: 20%;background-color: transparent;margin-left: 29%;margin-top: -83%;border: solid 1px transparent;',
+                    'onclick': 'openOnImageClick(this.id)',
                 }).appendTo('#vk' + arr[arr1[z]]);
                 $('<div/>', {
-                    'id':'hint3'+arr[arr1[z]],
+                    'id': 'hint3' + arr[arr1[z]],
                     'class': 'hint3',
-                    'style': ' position: relative;height: 14%;width: 20%;background-color: transparent;margin-left: 76%;margin-top: 38%;border: solid 1px transparent;',
+                    'onclick': 'openOnImageClick(this.id)',
                 }).appendTo('#vk' + arr[arr1[z]]);
-                
-                
-                $('#ak' + arr[arr1[z]]).prepend('<img style="max-width:100%;max-height:100%;" src="images/minions' + trimmed + '.png" />');
-                $('#vk' + arr[arr1[z]]).prepend('<img style="width: 100%;margin-top: 5px; margin-left: 5px; height: 100%;z-index: 0;" id="' + arr[arr1[z]] + '" src="images/kaartachterkant.png" onclick="openOnImageClick(this.id)"/>');
-                
-                if(arr[arr1[z]] == '1' || arr[arr1[z]] == '1b' || arr[arr1[z]] == '4'|| arr[arr1[z]] == '4b'|| arr[arr1[z]] == '12'|| arr[arr1[z]] == '12b')
-                { 
-                    
-                    var R = Math.floor((Math.random() * 6) + 1);
-                    console.log(R);
-                    switch (R) {
-                    case 1:
-                        var hint1 = '1.3.png';
-                        var hint2 = '2.4.png';
-                        var hint3 = '2.1.png';
-                            
-                        break;
-                    case 2:
-                        var hint1 = '1.3.png';
-                        var hint2 = '2.1.png';
-                        var hint3 = '2.4.png';
-                        
-                        break;
-                    case 3:
-                        var hint1 = '1.4.png';
-                        var hint2 = '2.3.png';
-                        var hint3 = '2.1.png';
-                            
-                        break;
-                    case 4:
-                        var hint1 = '1.4.png';
-                        var hint2 = '2.1.png';
-                        var hint3 = '2.3.png';
-                        
-                        break;
-                    case 5:
-                        var hint1 = '1.1.png';
-                        var hint2 = '2.3.png';
-                        var hint3 = '2.4.png';
-                        
-                        break;
-                    case 6:
-                        var hint1 = '1.1.png';
-                        var hint2 = '2.4.png';
-                        var hint3 = '2.3.png';
-                        
-                        break;
-                    default:
-                        
-                    }
-                    $('#hint1'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint1/'+hint1+'" />');
-                    $('#hint2'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint2/'+hint2+'" />');
-                    $('#hint3'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint3/'+hint3+'" />');
-                }
-                 if(arr[arr1[z]] == '2' || arr[arr1[z]] == '2b' || arr[arr1[z]] == '3'|| arr[arr1[z]] == '3b'|| arr[arr1[z]] == '10'|| arr[arr1[z]] == '10b'|| arr[arr1[z]] == '11'|| arr[arr1[z]] == '11b')
-                { 
-                    
-                    var R = Math.floor((Math.random() * 6) + 1);
-                    console.log(R);
-                    switch (R) {
-                    case 1:
-                        var hint1 = '1.3.png';
-                        var hint2 = '2.2.png';
-                        var hint3 = '2.1.png';
-                            
-                        break;
-                    case 2:
-                        var hint1 = '1.3.png';
-                        var hint2 = '2.1.png';
-                        var hint3 = '2.2.png';
-                        
-                        break;
-                    case 3:
-                        var hint1 = '1.2.png';
-                        var hint2 = '2.3.png';
-                        var hint3 = '2.1.png';
-                            
-                        break;
-                    case 4:
-                        var hint1 = '1.2.png';
-                        var hint2 = '2.1.png';
-                        var hint3 = '2.3.png';
-                        
-                        break;
-                    case 5:
-                        var hint1 = '1.1.png';
-                        var hint2 = '2.3.png';
-                        var hint3 = '2.2.png';
-                        
-                        break;
-                    case 6:
-                        var hint1 = '1.1.png';
-                        var hint2 = '2.2.png';
-                        var hint3 = '2.3.png';
-                        
-                        break;
-                    default:
-                        
-                    }
-                    $('#hint1'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint1/'+hint1+'" />');
-                    $('#hint2'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint2/'+hint2+'" />');
-                    $('#hint3'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint3/'+hint3+'" />');
-                }
-                 if(arr[arr1[z]] == '5' || arr[arr1[z]] == '5b' || arr[arr1[z]] == '9'|| arr[arr1[z]] == '9b'|| arr[arr1[z]] == '14'|| arr[arr1[z]] == '14b'|| arr[arr1[z]] == '15'|| arr[arr1[z]] == '15b')
-                { 
-                    
-                    var R = Math.floor((Math.random() * 6) + 1);
-                    console.log(R);
-                    switch (R) {
-                    case 1:
-                        var hint1 = '1.4.png';
-                        var hint2 = '2.2.png';
-                        var hint3 = '2.1.png';
-                            
-                        break;
-                    case 2:
-                        var hint1 = '1.4.png';
-                        var hint2 = '2.1.png';
-                        var hint3 = '2.2.png';
-                        
-                        break;
-                    case 3:
-                        var hint1 = '1.2.png';
-                        var hint2 = '2.4.png';
-                        var hint3 = '2.1.png';
-                            
-                        break;
-                    case 4:
-                        var hint1 = '1.2.png';
-                        var hint2 = '2.1.png';
-                        var hint3 = '2.4.png';
-                        
-                        break;
-                    case 5:
-                        var hint1 = '1.1.png';
-                        var hint2 = '2.4.png';
-                        var hint3 = '2.2.png';
-                        
-                        break;
-                    case 6:
-                        var hint1 = '1.1.png';
-                        var hint2 = '2.2.png';
-                        var hint3 = '2.4.png';
-                        
-                        break;
-                    default:
-                        
-                    }
-                    $('#hint1'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint1/'+hint1+'" />');
-                    $('#hint2'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint2/'+hint2+'" />');
-                    $('#hint3'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint3/'+hint3+'" />');
-                }
-                if(arr[arr1[z]] == '6' || arr[arr1[z]] == '6b' || arr[arr1[z]] == '7'|| arr[arr1[z]] == '7b'|| arr[arr1[z]] == '8'|| arr[arr1[z]] == '8b')
-                { 
-                    
-                    var R = Math.floor((Math.random() * 6) + 1);
-                    console.log(R);
-                    switch (R) {
-                    case 1:
-                        var hint1 = '1.4.png';
-                        var hint2 = '2.2.png';
-                        var hint3 = '2.3.png';
-                            
-                        break;
-                    case 2:
-                        var hint1 = '1.4.png';
-                        var hint2 = '2.3.png';
-                        var hint3 = '2.2.png';
-                        
-                        break;
-                    case 3:
-                        var hint1 = '1.2.png';
-                        var hint2 = '2.4.png';
-                        var hint3 = '2.3.png';
-                            
-                        break;
-                    case 4:
-                        var hint1 = '1.2.png';
-                        var hint2 = '2.3.png';
-                        var hint3 = '2.4.png';
-                        
-                        break;
-                    case 5:
-                        var hint1 = '1.3.png';
-                        var hint2 = '2.4.png';
-                        var hint3 = '2.2.png';
-                        
-                        break;
-                    case 6:
-                        var hint1 = '1.3.png';
-                        var hint2 = '2.2.png';
-                        var hint3 = '2.4.png';
-                        
-                        break;
-                    default:
-                        
-                    }
-                    $('#hint1'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint1/'+hint1+'" />');
-                    $('#hint2'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint2/'+hint2+'" />');
-                    $('#hint3'+ arr[arr1[z]]).prepend('<img style="width:100%;height:100%;" src="hint3/'+hint3+'" />');
-                }
-                
-                
-                
+
+
+                $('#ak' + arr[arr1[z]]).prepend('<img class="nodragimg frontimg" src="images/minions' + trimmed + '.png" />');
+                $('#vk' + arr[arr1[z]]).prepend('<img class="nodragimg backimg" id="' + arr[arr1[z]] + '" src="images/kaartachterkant.png" onclick="openOnImageClick(this.id)"/>');
+
+                hintsplaatsen(arr[arr1[z]]);
+
+
+
                 z++;
             }
             return;
         }
-        
-        $(document).ready(function () {
 
-            kaartenmaken();
-           
-            var i = 1;
-            while (i < 31) {
-                var tel;
-                if (i > 15) {
-                    tel = i - 15 + 'b'
-                } else {
-                    tel = i
+        function kaartogenbliktonen() {
+            setTimeout(function () {
+                var i = 1;
+                while (i < 31) {
+                    var tel;
+                    if (i > 15) {
+                        tel = i - 15 + 'b'
+                    } else {
+                        tel = i
+                    }
+                    i++;
+                    kaarttonen(tel);
                 }
-                i++;
-                kaarttonen(tel);
-            }
+            }, 1000);
             setTimeout(function () {
                 var t = 1;
                 while (t < 31) {
@@ -369,41 +337,133 @@
                     }
                     t++;
                     kaartomdraaien(tel);
+
                 }
-            }, 1000);
+            }, 3000);
+
+        }
+
+        $(document).ready(function () {
+            kaartenmaken();
+            kaartogenbliktonen();
+            onHover();
+            offHover();
+      
 
         });
+        var divvisible;
+
+        function onHover() {
+            $(".Menuimg").hover(function () {
+                $('#Menudiv').css({
+                    'left': '0px',
+                    'border-right': 'solid 1px rgba(0,0,0,0.7)',
+                    'transition': 'left 1s 0s, border-right 1s 0.3s',
+                });
+                $('#Menuimg1').css({
+                    'rotate': 'rotate(90deg)',
+                    '-webkit-transform': ' rotate(90deg)',
+                    '-moz-transform': ' rotate(90deg)',
+                    '-o-transform': ' rotate(90deg)',
+                    '-ms-transform': ' rotate(90deg)',
+                    'transform': ' rotate(90deg)',
+                    'transition': 'transform 1s 0s',
+                });
+            });
+
+        }
+
+        function offHover() {
+            $(".Menuimg").hover(function () {
+                $('#Menudiv').css({
+                    'left': '-150px',
+                    'border-right': 'solid 0px rgba(0,0,0,0.7)',
+                    'transition': 'left 1s 0s, border-right 1s 0.3s',
+                });
+                $('#Menuimg1').css({
+                    'rotate': 'rotate(0deg)',
+                    '-webkit-transform': ' rotate(0deg)',
+                    '-moz-transform': ' rotate(0deg)',
+                    '-o-transform': ' rotate(0deg)',
+                    '-ms-transform': ' rotate(0deg)',
+                    'transform': ' rotate(0deg)',
+                    '-left': '20px',
+                    'transition': 'transform 2s 0s',
+                });
+            });
+        }
 
         function openOnImageClick(id) {
-            if (kaart2 == null ) {
+            if (indexTimerMin == null) {
+                indexTimerMin = 0;
+                obj.Interval = 100;
+                obj.Tick = timer_tick;
+                obj.Start();
+            }
+            if (id.substr(0, 4) == 'hint') {
+                id = id.substr(5)
+            }
+            aantalkaartenomgedraait = aantalkaartenomgedraait + 1;
+            if (id == '13b') {
+                kaarttonen(id);
+
+                setTimeout(function () {
+                    sound("2")
+                }, 800);
+                setTimeout(function () {
+                    kaartogenbliktonen();
+                    kaartverwijderen(id);
+                }, 1500);
+                reset()
+
+            } else if (id == '13') {
+                kaarttonen(id);
+                setTimeout(function () {
+                    kaartverwijderen(id);
+                    kaartenweg();
+                    sound(1);
+                    notif("Oouuhh..");
+                    obj.Stop();
+                }, 1500);
+            } else {
+                if (kaart2 != null) {
+                    reset();
+                }
+
                 if (kaartteller == 0 || kaartteller == 1) {
                     switch (kaartteller) {
                     case 0:
                         kaart1 = id;
                         kaartteller = 1;
+                        kaarttonen(id);
                         break;
                     case 1:
                         kaart2 = id;
                         kaartteller = 2;
+                        kaarttonen(id);
                         break;
                     default:
-                        kaartteller = 1;
-                        kaart1 = id;
                     }
-                    kaarttonen(id);
-$("#vk" +id).removeClass("font");
-                    var delay = 2000;
+
+                    $("#vk" + id).removeClass("font");
+
                     if (kaartteller == 2) {
-                        if ( kaart1 + 'b' == kaart2 || kaart1 == kaart2 + 'b') {
-                            setTimeout(function () {
+                        if (kaart1 + 'b' == kaart2 || kaart1 == kaart2 + 'b') {
+                            timerhandeler = setTimeout(function () {
                                 kaartverwijderen(kaart1);
                                 kaartverwijderen(kaart2);
                                 kaartteller = 0;
+                                aantalkaartenjuist = aantalkaartenjuist + 1;
+                                console.log(aantalkaartenjuist);
+                                if (aantalkaartenjuist == 14) {
+                                    notif("You Won!");
+                                    obj.Stop();
+                                }
                                 kaart1 = null;
                                 kaart2 = null;
-                            }, 2000);
+                            }, 800);
                         } else {
-                            setTimeout(function () {
+                            timerhandeler = setTimeout(function () {
                                 kaartomdraaien(kaart1);
                                 kaartomdraaien(kaart2);
                                 kaartteller = 0;
@@ -414,15 +474,34 @@ $("#vk" +id).removeClass("font");
                     }
                 }
             }
+
         }
     </script>
     <title>Titel van de webpagina</title>
     <style>
+        body {
+            -webkit-touch-callout: none;
+            /* iOS Safari */
+            -webkit-user-select: none;
+            /* Chrome/Safari/Opera */
+            -khtml-user-select: none;
+            /* Konqueror */
+            -moz-user-select: none;
+            /* Firefox */
+            -ms-user-select: none;
+            /* IE/Edge */
+            user-select: none;
+            -webkit-user-drag: none;
+            user-drag: none;
+            -webkit-touch-callout: none;
+            margin: 0;
+        }
+        
         #f1_container {
             position: relative;
             margin: 10px auto;
-            width: auto;
-            height: auto;
+            width: 50%;
+            height: 1100px;
             z-index: 1;
         }
         
@@ -435,29 +514,32 @@ $("#vk" +id).removeClass("font");
             height: 178px;
             transform-style: preserve-3d;
             transition: all 1.0s linear;
+            margin-bottom: 15px;
+            margin-left: 15px;
+            float: left;
         }
         
         .front {
-             -webkit-box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 5px;
+            -webkit-box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 5px;
             -moz-box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 5px;
             box-shadow: rgba(0, 0, 0, 0.8) 0px 0px 5px;
-        
+            border: solid 1px black;
+            border-radius: 9px;
+            background-color: white;
         }
+        
         .front:hover {
             -webkit-box-shadow: rgba(0, 0, 0, 0.8) 3px 2px 10px;
             -moz-box-shadow: rgba(0, 0, 0, 0.8) 3px 2px 10px;
             box-shadow: rgba(0, 0, 0, 0.8) 3px 2px 10px;
-             
-            
         }
-        .front:hover +  .back{}
         
         .face {
             position: absolute;
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
-                overflow: hidden;
+            overflow: hidden;
         }
         
         .face.back {
@@ -467,16 +549,190 @@ $("#vk" +id).removeClass("font");
             padding: 10px;
             color: white;
             text-align: center;
-            background-color: #aaa;
+            border: solid 1px black;
+            border-radius: 9px;
+            background-color: white;
+        }
+        
+        .nodragimg {
+            user-drag: none;
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-drag: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+        
+        .frontimg {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        .backimg {
+            width: 100%;
+            margin-top: 5px;
+            margin-left: 5px;
+            height: 100%;
+            z-index: 0;
+        }
+        
+        .hint {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .hint1 {
+            position: relative;
+            height: 14%;
+            width: 20%;
+            background-color: transparent;
+            margin-left: 23%;
+            margin-top: -75%;
+            border: solid 1px transparent;
+        }
+        
+        .hint2 {
+            position: relative;
+            height: 14%;
+            width: 20%;
+            background-color: transparent;
+            margin-left: 29%;
+            margin-top: -83%;
+            border: solid 1px transparent;
+        }
+        
+        .hint3 {
+            position: relative;
+            height: 14%;
+            width: 20%;
+            background-color: transparent;
+            margin-left: 76%;
+            margin-top: 38%;
+            border: solid 1px transparent;
+        }
+        
+        #notif {
+            position: absolute;
+            width: 250px;
+            height: auto;
+            min-height: 100px;
+            background: white;
+            z-index: 1000;
+            border-radius: 5px;
+            border: solid 1px black;
+            -webkit-box-shadow: rgba(0, 0, 0, 0.8) 3px 2px 10px;
+            -moz-box-shadow: rgba(0, 0, 0, 0.8) 3px 2px 10px;
+            box-shadow: rgba(0, 0, 0, 0.5) 3px 3px 10px;
+            left: 0;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            top: 40%;
+            text-align: center;
+        }
+        
+        .font {
+            font-size: 56px;
+            font-family: fantasy;
+            color: #FDE61C;
+            text-shadow: -3px -1px #B88723;
+            letter-spacing: 4px;
+            -webkit-box-sizing: content-box;
+            -moz-box-sizing: content-box;
+            box-sizing: content-box;
+            cursor: pointer;
+            color: #fcdf07;
+            text-align: center;
+            -o-text-overflow: clip;
+            text-overflow: clip;
+            text-shadow: 0 1px 0 rgba(253, 230, 28, 0.93), 0 2px 0 rgba(253, 230, 28, 0.94), 0 3px 0 rgba(253, 230, 28, 0.26), 0 4px 0 rgba(253, 230, 28, 0.31), 0 5px 0 rgba(253, 230, 28, 0.2), 0 6px 1px rgba(0, 0, 0, 0.0980392), 0 0 5px rgba(0, 0, 0, 0.0980392), 0 1px 3px rgba(0, 0, 0, 0.298039), 0 3px 5px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.247059), 0 10px 10px rgba(0, 0, 0, 0.2), 0 20px 20px rgba(0, 0, 0, 0.14902);
+            -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+            -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+            -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+            transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        }
+        
+        #bovenbalk {
+            text-align: center;
+            width: auto;
+            border-bottom: solid 1px rgba(0, 0, 0, 0.7);
+            height: 145px;
+            width: 95%;
+        }
+        
+        #tijdmin {
+            float: left;
+        }
+        
+        #tijdsec {
+            float: left;
+        }
+        
+        #tijdmillisec {
+            float: left;
+        }
+        
+        #timer {
+            margin: auto;
+            width: 259px;
+            margin-top: -50px;
+        }
+        
+        #Menuimg1 {
+            position: fixed;
+            z-index: 11;
+        }
+        
+        #Menudiv {
+            width: 150px;
+            height: 110%;
+            position: fixed;
+            z-index: 10;
+            background-color: white;
+            left: -150px;
+            top: -30px;
+        }
+        html, body{
+width:100%; 
+height:100%;
+}
+        #sound{
+            display: block;
+    margin: auto;
+            margin-top: 200px;
+
+        
             
+        }
+        #hintsaan{
+            
+            display: block;
+    margin: auto;
+            width: 60%;
+             margin-top: 50px;
+
+        
         }
     </style>
 </head>
 
+
 <body>
-    <div id="f1_container">
+    <img id="Menuimg1" class="Menuimg" src="images/menu.png" onmouseout="offHover()" onmouseover="onHover()" style="transform: rotate(0deg); transition: transform 1s 0s, opacity 0s linear;">
+    <div id='Menudiv' class="Menuimg"  onmouseout="offHover()" onmouseover="onHover()"style="left: -150px; transition: left 1s 0s, opacity 0s linear;"><img id='sound' onclick="soundcontrol()" src="images/soundon.png"  ><br><img id='hintsaan' onclick="hints();" src="images/hintson.png"  ></div>
+    <div id="f1_container">.
+        <div id='bovenbalk'>
+            <div id='timer'>
+                <p id="tijdmillisec" class="font">00:</p>
+                <p id="tijdsec" class="font">00:</p>
+                <p id="tijdmin" class="font">00</p>
+                </br>
+                </br>
+            </div>
 
-
+        </div>
+        <br>
+        <br>
     </div>
 
 </body>
