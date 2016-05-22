@@ -195,4 +195,90 @@ if(id == '1' || id == '1b' || id == '4'|| id == '4b'|| id == '12'|| id == '12b')
                     $('#hint2'+ id).prepend('<img class="nodragimg hint" src="images/hint2/'+hint2+'" />');
                     $('#hint3'+ id).prepend('<img class="nodragimg hint" src="images/hint3/'+hint3+'" />');
                 }
+    if(id == '13' || id == '13b')
+                { 
+                    
+                    var R = Math.floor((Math.random() * 12) + 1);
+                 
+                    switch (R) {
+                    case 1:
+                        var hint1 = '1.4.png';
+                        var hint2 = '2.2.png';
+                        var hint3 = '2.3.png';
+                            
+                        break;
+                    case 2:
+                        var hint1 = '1.4.png';
+                        var hint2 = '2.3.png';
+                        var hint3 = '2.2.png';
+                        
+                        break;
+                    case 3:
+                        var hint1 = '1.2.png';
+                        var hint2 = '2.4.png';
+                        var hint3 = '2.3.png';
+                            
+                        break;
+                    case 4:
+                        var hint1 = '1.2.png';
+                        var hint2 = '2.3.png';
+                        var hint3 = '2.4.png';
+                            
+                        break;
+                    case 5:
+                        var hint1 = '1.3.png';
+                        var hint2 = '2.4.png';
+                        var hint3 = '2.2.png';
+                        
+                        break;
+                    case 6:
+                        var hint1 = '1.3.png';
+                        var hint2 = '2.2.png';
+                        var hint3 = '2.4.png';
+                        
+                        break;
+                            
+                     case 7:
+                        var hint1 = '1.3.png';
+                        var hint2 = '2.4.png';
+                        var hint3 = '2.1.png';
+                            
+                        break;
+                    case 8:
+                        var hint1 = '1.3.png';
+                        var hint2 = '2.1.png';
+                        var hint3 = '2.4.png';
+                        
+                        break;
+                    case 9:
+                        var hint1 = '1.4.png';
+                        var hint2 = '2.3.png';
+                        var hint3 = '2.1.png';
+                            
+                        break;
+                    case 10:
+                        var hint1 = '1.4.png';
+                        var hint2 = '2.1.png';
+                        var hint3 = '2.3.png';
+                        
+                        break;
+                    case 11:
+                        var hint1 = '1.1.png';
+                        var hint2 = '2.3.png';
+                        var hint3 = '2.4.png';
+                        
+                        break;
+                    case 12:
+                        var hint1 = '1.1.png';
+                        var hint2 = '2.4.png';
+                        var hint3 = '2.3.png';
+                        
+                        break;
+                    default:
+                        
+                    }
+                    $('#hint1'+ id).prepend('<img class="nodragimg hint" src="images/hint1/'+hint1+'" />');
+                    $('#hint2'+ id).prepend('<img class="nodragimg hint" src="images/hint2/'+hint2+'" />');
+                    $('#hint3'+ id).prepend('<img class="nodragimg hint" src="images/hint3/'+hint3+'" />');
+                }
 }
